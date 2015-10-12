@@ -1,0 +1,21 @@
+-# redis cache introspection
+- r = Redis.new
+
+%h3 Keys
+
+- r.keys.each do |key|
+  %p
+    %b #{key}:
+    %a.btn{ href: js_void, data: { cache_key: key } }
+      +
+
+- content_for :js do
+  - capture_haml do
+    :javascript
+      $("a[data-cache-key]").on("click", function(evt){
+        var elem = evt.target
+        var key  = elem.dataset.cacheKey
+        $.getJSON("/cache/"+key, function(data){
+          $(elem.parentElement).append("<p>"+JSON.stringify(data)+"</p>")
+        })
+      })

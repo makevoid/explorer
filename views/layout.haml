@@ -1,0 +1,21 @@
+- title = "Blockchain Visualization"
+!!!
+%html
+  %head
+    %meta{ charset: "utf-8" }
+    %title #{title}
+    = assets :css
+
+  %body{ class: body_class }
+    .container
+      %h1
+        %a{ href: "/" } #{title}
+      /
+        %nav
+          %a.btn{ href: "/blocks" } Blocks
+
+      %section.content
+        = yield
+
+    = assets :js
+    = content_for :js

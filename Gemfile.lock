@@ -1,0 +1,48 @@
+GIT
+  remote: git://github.com/makevoid/bitcoin-client.git
+  revision: a25722a319f338c8fa800d5f8457c619e0466124
+  specs:
+    bitcoin-client (0.0.3)
+      rest-client
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    coffee-script (2.4.1)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.9.1.1)
+    domain_name (0.5.25)
+      unf (>= 0.0.5, < 1.0.0)
+    execjs (2.6.0)
+    haml (4.0.7)
+      tilt
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
+    mime-types (2.6.2)
+    netrc (0.10.3)
+    rack (1.6.4)
+    redis (3.2.1)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
+    roda (2.6.0)
+      rack
+    tilt (2.0.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bitcoin-client!
+  coffee-script
+  haml
+  redis
+  roda
+
+BUNDLED WITH
+   1.10.6
