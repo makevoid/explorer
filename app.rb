@@ -18,8 +18,8 @@ class App < Roda
     response['Content-Type'] = 'application/json'
   end
 
-  def wallet
-    @@wallet ||= Wallet.new
+  def keychain
+    @@keychain ||= Keychain.new
   end
 
   def params
@@ -77,7 +77,7 @@ class App < Roda
         r.is do
           r.get do
             json_route
-            w = wallet.dev
+            w = keychain.dev
             hash = w.getblockhash block_count.to_i
             block = w.getblock hash
             { block: block }.to_json

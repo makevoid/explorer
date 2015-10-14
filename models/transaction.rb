@@ -1,7 +1,7 @@
 class Transaction
   attr_reader :account, :address, :category, :amount, :vout, :confirmations, :blockhash, :blockindex, :blocktime, :txid, :conflicts, :time, :timereceived
 
-  def initialize(account:, address:, category:, amount:, vout:, confirmations:, blockhash:, blockindex:, blocktime:, txid:, walletconflicts:, time:, timereceived:)
+  def initialize(account:, address:, category:, amount:, vout:, confirmations:, blockhash:, blockindex:, blocktime:, txid:, keychainconflicts:, time:, timereceived:)
     @account = account
     @address = address
     @category = category
@@ -12,7 +12,7 @@ class Transaction
     @blockindex     = blockindex
     @blocktime      = blocktime
     @txid           = txid
-    @conflicts = walletconflicts
+    @conflicts = keychainconflicts
     @time = time
     @timereceived = timereceived
   end

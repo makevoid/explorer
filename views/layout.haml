@@ -8,6 +8,12 @@
 
   %body{ class: body_class }
     .container
+      .right.set_fonts
+        %a.btn{ data: {dir: "increase"} } +
+        \/
+        %a.btn{ data: {dir: "decrease"} } -
+
+
       %h1
         %a{ href: "/" } #{title}
       /
@@ -19,3 +25,14 @@
 
     = assets :js
     = content_for :js
+    :coffee
+      console.log "aaa"
+      curSize = 14
+      $(".set_fonts .btn").on "click", (evt) ->
+        console.log evt.target.dataset
+        if (evt.target.dataset.dir == "increase")
+          curSize += 2
+        else
+          curSize -= 2
+
+        $('.container').css 'font-size', curSize

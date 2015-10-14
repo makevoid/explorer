@@ -1,7 +1,7 @@
 require 'json'
 require_relative 'transaction'
 
-class Wallet
+class Keychain
 
   def initialize
     @client = BitcoinClient::Client.new 'bitcoinrpc', RPC_PASSWORD, {
@@ -41,7 +41,7 @@ class Wallet
         blockindex:      tx[:blockindex],
         blocktime:       tx[:blocktime],
         txid:            tx.fetch(:txid),
-        walletconflicts: tx.fetch(:walletconflicts),
+        keychainconflicts: tx.fetch(:keychainconflicts),
         time:            tx.fetch(:time),
         timereceived:    tx.fetch(:timereceived),
       )

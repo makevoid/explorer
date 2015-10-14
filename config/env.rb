@@ -24,9 +24,15 @@ end
 
 RPC_PASSWORD = password.strip
 
+# TODO:
+#
+# rescue
+#
+# BitcoinClient::Errors::RPCError
+
 
 # models
-require_relative "../models/wallet"
+require_relative "../models/keychain"
 
 
 # lib

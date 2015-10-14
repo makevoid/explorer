@@ -1,5 +1,5 @@
 :ruby
-  w = wallet.dev
+  w = keychain.dev
   block_count = w.getblockcount
   hash = w.getblockhash block_count
 
@@ -24,13 +24,13 @@
 %h3.hash
   #{hash.sub /^0+/, ''}
 
+-# TODO: add moment.js for the time.ago
 %script.tx_template{ type: "text/x-handlebars-template" }
   :plain
     <h4>Infos</h4>
     <p>Time: {{time}}</p>
     <p>Confirmations: {{confirmations}}</p>
     <p>Size: {{size}}</p>
-    <p>Bits: {{bits}}</p>
     <h4>Transactions ({{tx_count}})</h4>
     {{#each tx}}
       <p>{{this}}</p>
