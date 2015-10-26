@@ -16,13 +16,21 @@
   .line
   .block{ data: { block_count: block_count-1 } }= block_count-1
   .line
-  .block{ data: { block_count: block_count  }  }= block_count
+  .block{ data: { block_count: block_count   }  }= block_count
   .line_dot
   .block_dot
 .spacer_viz
 
-%h3.hash
-  #{hash.sub /^0+/, ''}
+%h3
+  %span Block:
+  %span.block_number
+    = block_count
+  %span -
+  %span.hash
+    #{hash.sub /^0+/, ''}
+
+.blocks_data.hidden{ data: { latest_block: block_count }, type: "text/x-handlebars-template" }
+
 
 -# TODO: add moment.js for the time.ago
 %script.tx_template{ type: "text/x-handlebars-template" }
@@ -33,7 +41,7 @@
     <p>Size: {{size}}</p>
     <h4>Transactions ({{tx_count}})</h4>
     {{#each tx}}
-      <p>{{this}}</p>
+      <p><a href='/txs/{{this}}'>{{this}}</a></p>
     {{/each}}
 
 .transactions
@@ -44,18 +52,22 @@
       tx_template = $(".tx_template").html()
       tx_template = Handlebars.compile(tx_template)
 
-      load_transactions = (block) ->
-        $.getJSON "/blocks/"+block, (data) ->
+      load_transactions = (block_num) ->
+        $.getJSON "/blocks/"+block_num, (data) ->
           console.log "got block", data
           block = data.block
           block.tx_count = block.tx.length
           html = tx_template block
           $(".transactions").html html
+          $(".hash").html block.hash.replace /^0+/, ''
+          $(".block_number").html block_num
 
       $(".block").on "click", (evt) ->
         elem = evt.target
         block_count = elem.dataset.blockCount
         load_transactions block_count
+
+      load_transactions $('.blocks_data').data("latest-block")
 
 %p page rendering time: #{Time.now - @time}
 

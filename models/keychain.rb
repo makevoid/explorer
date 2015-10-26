@@ -1,5 +1,6 @@
 require 'json'
 require_relative 'transaction'
+require_relative 'raw_transaction'
 
 class Keychain
 
@@ -46,6 +47,11 @@ class Keychain
         timereceived:    tx.fetch(:timereceived),
       )
     end
+  end
+
+  def get_transaction(tx_id)
+    tx = RawTransaction.new tx_id, @client
+    tx.get
   end
 
   if APP_ENV == "development"

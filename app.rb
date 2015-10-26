@@ -86,6 +86,17 @@ class App < Roda
       end
     end
 
+    r.on "txs" do
+      r.on ":tx_id" do |tx_id|
+        r.is do
+          r.get do
+            @tx_id = tx_id
+            view "tx"
+          end
+        end
+      end
+    end
+
     # all BC gets will be public, otherwise add if APP_ENV=="development"
     r.on "cache" do
       r.is do
