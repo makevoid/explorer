@@ -15,7 +15,7 @@ class RawTransaction
   private
 
   def getrawtransaction(tx_id)
-    x = @client.getrawtransaction tx_id
+    @client.getrawtransaction tx_id
   end
 
   def decoderawtransaction(raw_tx)
