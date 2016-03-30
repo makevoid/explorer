@@ -5,7 +5,7 @@ require_relative 'raw_transaction'
 class Keychain
 
   def initialize
-    @client = BitcoinClient::Client.new 'bitcoinrpc', RPC_PASSWORD, {
+    @client = BitcoinClient::Client.new RPC_USER, RPC_PASSWORD, {
       host: RPC_HOST,
       cache: true,
     }

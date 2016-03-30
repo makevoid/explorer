@@ -22,9 +22,11 @@ read = -> (path) { File.read File.expand_path path }
 
   path = "~/.bitcoin/bitcoin.conf"
   file = read.( path )
-  file.strip.match(/rpcpassword=(.+)/)[1]
+  password = file.strip.match(/rpcpassword=(.+)/)[1]
 # end
 
+# RPC_USER     = 'bitcoinrpc'
+RPC_USER     = 'bitcoin'
 RPC_PASSWORD = password.strip
 
 # TODO:

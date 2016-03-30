@@ -4,7 +4,7 @@ require_relative 'config/env'
 class App < Roda
   plugin(:assets,
     css: ["style.css"],
-    js:  ["vendor/zepto.js", "vendor/underscore.js", "vendor/qrcode.js", "vendor/handlebars.js"],
+    js:  ["vendor/zepto.js", "vendor/underscore.js", "vendor/qrcode.js", "vendor/handlebars.js", "vendor/three.js"],
   )
 
   plugin :render, engine: "haml"
@@ -64,6 +64,15 @@ class App < Roda
 
     r.root do
       r.redirect "/blocks"
+    end
+
+
+    r.on "blocks_new" do
+      r.is do
+        r.get do
+          view "blocks_new"
+        end
+      end
     end
 
     r.on "blocks" do

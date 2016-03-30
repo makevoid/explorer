@@ -21,9 +21,12 @@
           %a.btn{ href: "/blocks" } Blocks
 
       %section.content
+        = assets :js
         = yield
 
-    = assets :js
+    -# FIXME
+    -#
+    -# assets :js
     = content_for :js
     :coffee
       curSize = 14
