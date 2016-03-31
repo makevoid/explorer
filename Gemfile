@@ -9,4 +9,6 @@ gem "bitcoin-client", github: "makevoid/bitcoin-client"
 
 # gem "byebug"
 
+gem 'hashie', require: "hashie/mash"
+
 gem "coffee-script"

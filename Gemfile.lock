@@ -17,6 +17,7 @@ GEM
     execjs (2.6.0)
     haml (4.0.7)
       tilt
+    hashie (3.4.3)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     mime-types (2.6.2)
@@ -41,8 +42,9 @@ DEPENDENCIES
   bitcoin-client!
   coffee-script
   haml
+  hashie
   redis
   roda
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

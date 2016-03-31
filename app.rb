@@ -4,7 +4,7 @@ require_relative 'config/env'
 class App < Roda
   plugin(:assets,
     css: ["style.css"],
-    js:  ["vendor/zepto.js", "vendor/underscore.js", "vendor/qrcode.js", "vendor/handlebars.js", "vendor/three.js"],
+    js:  ["vendor/zepto.js", "vendor/underscore.js", "vendor/qrcode.js", "vendor/handlebars.js", "vendor/three.js", "vendor/three.flycontrols.js"],
   )
 
   plugin :render, engine: "haml"
