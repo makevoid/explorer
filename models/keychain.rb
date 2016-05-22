@@ -54,13 +54,13 @@ class Keychain
     tx.get
   end
 
-  if APP_ENV == "development"
-    # shortcircuit api
+  # if APP_ENV == "development"
+    # shortcircuit api - FIXME? or not
 
     def dev
       @client
     end
-  end
+  # end
 
   private
 
