@@ -41,9 +41,23 @@
     <p>Size: {{size}}</p>
     <h4>Transactions ({{tx_count}})</h4>
     {{#each tx}}
-      <p><a href='/txs/{{this}}'>{{this}}</a></p>
+      <div class='tx'><a href='/txs/{{this}}'>{{this}}</a></div>
     {{/each}}
 
+:css
+  .transactions .tx {
+    border-radius: 7px;
+    background: #EEE;
+    text-align: center;
+    display: inline-block;
+    padding: 4px 5px;
+    min-width: 600px;
+    margin-bottom: 15px;
+  }
+  .transactions .tx:hover {
+    background: #DDD;
+    cursor: pointer;
+  }
 .transactions
 
 - content_for :js do
