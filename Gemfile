@@ -12,3 +12,6 @@ gem "bitcoin-client", github: "makevoid/bitcoin-client"
 gem 'hashie', require: "hashie/mash"
 
 gem "coffee-script"
+
+
+gem "puma"

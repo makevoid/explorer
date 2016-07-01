@@ -114,13 +114,11 @@ class App < Roda
         end
       end
 
-      redis = Redis.new
-
       r.on ":id" do |id|
         r.is do
           r.get do
             json_route
-            { value: redis.get(id) }.to_json
+            { value: REDIS.get(id) }.to_json
           end
         end
       end

@@ -2,12 +2,15 @@ require 'json'
 require_relative 'transaction'
 require_relative 'raw_transaction'
 
-class Keychain
 
+class Keychain
+# http://mkvd.eu.ngrok.io/
   def initialize
     @client = BitcoinClient::Client.new RPC_USER, RPC_PASSWORD, {
       host: RPC_HOST,
+      port: RPC_PORT,
       cache: true,
+      redis: REDIS,
     }
   end
 
