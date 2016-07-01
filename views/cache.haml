@@ -1,9 +1,6 @@
-:ruby
-  r = REDIS
-
 %h3 Keys
 
-- r.keys.each do |key|
+- keys.each do |key|
   %p
     %b #{key}:
     %a.btn{ href: js_void, data: { cache_key: key } }

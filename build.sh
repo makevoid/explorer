@@ -1,1 +1,1 @@
-d build --tag makevoid/explorer  .  
+docker build --tag makevoid/explorer  .  

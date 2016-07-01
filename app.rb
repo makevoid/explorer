@@ -110,7 +110,8 @@ class App < Roda
     r.on "cache" do
       r.is do
         r.get do
-          view "cache"
+          keys = REDIS.keys
+          view "cache", locals: { keys: keys }
         end
       end
 
