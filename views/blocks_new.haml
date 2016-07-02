@@ -9,6 +9,19 @@
 
 :coffee
   $ ->
+    c = console
+
+    # data
+
+    getLatestBlock = ->
+      #{block_count}
+
+    getBlocks = ->
+      latest = getLatestBlock()
+      _.range(latest-5, latest)
+
+    # viz
+
     camera = undefined
     scene = undefined
     renderer = undefined
@@ -21,12 +34,19 @@
 
 
     controls = (camera, domElement) ->
-      ctrls = new THREE.FlyControls camera
-      ctrls.movementSpeed = 1000
-      ctrls.domElement = domElement
-      ctrls.rollSpeed = Math.PI / 24
-      ctrls.autoForward = false
-      ctrls.dragToLook = false
+      # ctrls = new THREE.FlyControls camera
+      # ctrls.movementSpeed = 1000
+      # ctrls.domElement = domElement
+      # ctrls.rollSpeed = Math.PI / 24
+      # ctrls.autoForward = false
+      # ctrls.dragToLook = false
+
+      ctrls = new THREE.OrbitControls camera, domElement
+      # ctrls.addEventListener( 'change', render ) # add this only if there is no animation loop (requestAnimationFrame)
+      -# ctrls.addEventListener 'change', render
+      ctrls.enableDamping = true
+      ctrls.dampingFactor = 0.25
+      ctrls.enableZoom = false
 
     init = ->
       camera = new (THREE.PerspectiveCamera)(70, window.innerWidth / window.innerHeight, 1, 1000)
@@ -35,22 +55,39 @@
 
       scene = new (THREE.Scene)
 
-
+      latestBlock = getLatestBlock()
+      blocks      = getBlocks()
+      c.log latestBlock, blocks
 
       light = new THREE.DirectionalLight 0xffffff
       light.position.set 0, 0, 1
       scene.add light
 
       geometry = new (THREE.BoxGeometry)(200, 200, 200)
-      # material = new THREE.MeshBasicMaterial( { color: 0x00ffff, wireframe: false, vertexColors: THREE.VertexColors, transparent: false } )
 
-      material = new THREE.MeshPhongMaterial( { color: 0x00ffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 400 } )
+      dynamicTexture  = new THREEx.DynamicTexture 512, 512
+      dynamicTexture.context.font  = "bolder 90px Verdana";
+
+      material = new THREE.MeshBasicMaterial
+        # color:        0x00ffff
+        # wireframe:    false
+        # vertexColors: THREE.VertexColors
+        # transparent:  false
+        map:          dynamicTexture.texture
+
+      dynamicTexture.clear('grey').drawText latestBlock, undefined, 256, 'white'
+      dynamicTexture.texture.needsUpdate  = true
+
+      # material = new THREE.MeshPhongMaterial( { color: 0x00ffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 400 } )
+
 
       # material = new THREE.MeshBasicMaterial( { color: 0x000000, shading: THREE.FlatShading, wireframe: true, transparent: true } )
 
       mesh = new (THREE.Mesh)(geometry, material)
       scene.add mesh
       renderer = new (THREE.WebGLRenderer)
+      dynamicTexture.texture.anisotropy = renderer.getMaxAnisotropy()
+      dynamicTexture.texture.needsUpdate  = true
       renderer_defaults renderer
 
       container = document.createElement 'div'

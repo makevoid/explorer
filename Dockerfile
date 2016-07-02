@@ -1,24 +1,10 @@
-FROM ruby:2.3
-
-RUN apt-get update
-RUN apt-get install -y git nodejs npm && \
-    npm install coffee-script
-
-RUN mkdir /app
-WORKDIR   /app
+FROM makevoid/ruby-coffee
 
 ADD Gemfile      /app
 ADD Gemfile.lock /app
-
-ENV BUNDLE_PATH /tmp/bundle
-RUN bundle install
-
-ENV RACK_ENV production
-ENV DOCKER   1
+RUN bundle
 
 ADD .     /app
+RUN bundle
 
-EXPOSE 4567
-
-RUN bundle install
-CMD ["bundle", "exec", "rackup", "-p", "4567", "-o", "0.0.0.0"]
+CMD bundle exec rackup -o 0.0.0.0

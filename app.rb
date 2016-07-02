@@ -4,12 +4,22 @@ require_relative 'config/env'
 class App < Roda
   plugin(:assets,
     css: ["style.css"],
-    js:  ["vendor/zepto.js", "vendor/underscore.js", "vendor/qrcode.js", "vendor/handlebars.js", "vendor/three.js", "vendor/three.flycontrols.js"],
+    js:  [
+      "vendor/zepto.js",
+      "vendor/underscore.js",
+      "vendor/qrcode.js",
+      "vendor/handlebars.js",
+      "vendor/three.js",
+      "vendor/three.flycontrols.js",
+      "vendor/three.orbitcontrols.js",
+      "vendor/threex.dynamictexture.js",
+    ],
   )
 
   plugin :render, engine: "haml"
   plugin :partials
   plugin :not_found
+  plugin :error_handler
   # plugin :content_for
 
   # TODO: move in helpers
@@ -62,74 +72,98 @@ class App < Roda
   route do |r|
     @time = Time.now
 
-    r.root do
+    r.root {
       r.redirect "/blocks"
-    end
+    }
 
 
-    r.on "blocks_new" do
-      r.is do
-        r.get do
-          view "blocks_new"
-        end
-      end
-    end
+    r.on("blocks_new") {
+      r.is {
+        r.get {
+          w = keychain.dev
+          block_count = w.getblockcount
+          hash = w.getblockhash block_count
+          view "blocks_new", locals: {
+            w:           w,
+            block_count: block_count,
+            hash:        hash,
+          }
+        }
+      }
+    }
 
-    r.on "blocks" do
-      r.is do
-        r.get do
-          view "blocks"
-        end
-      end
+    r.on("blocks") {
+      r.is {
+        r.get {
+          w = keychain.dev
+          block_count = w.getblockcount
+          hash = w.getblockhash block_count
+          view "blocks", locals: {
+            w:           w,
+            block_count: block_count,
+            hash:        hash,
+          }
+        }
+      }
 
-      r.on ":block_count" do |block_count|
-        r.is do
-          r.get do
+      r.on(":block_count") { |block_count|
+        r.is {
+          r.get {
             json_route
             w = keychain.dev
             hash = w.getblockhash block_count.to_i
             block = w.getblock hash
             { block: block }.to_json
-          end
-        end
-      end
-    end
+          }
+        }
+      }
+    }
 
-    r.on "txs" do
-      r.on ":tx_id" do |tx_id|
-        r.is do
-          r.get do
+    r.on("txs") {
+      r.on(":tx_id") { |tx_id|
+        r.is {
+          r.get {
             @tx_id = tx_id
             view "tx"
-          end
-        end
-      end
-    end
+          }
+        }
+      }
+    }
 
     # all BC gets will be public, otherwise add if APP_ENV=="development"
-    r.on "cache" do
-      r.is do
-        r.get do
+    r.on("cache") {
+      r.is {
+        r.get {
           keys = REDIS.keys
           view "cache", locals: { keys: keys }
-        end
-      end
+        }
+      }
 
-      r.on ":id" do |id|
-        r.is do
-          r.get do
+      r.on(":id") { |id|
+        r.is {
+          r.get {
             json_route
             { value: REDIS.get(id) }.to_json
-          end
-        end
-      end
+          }
+        }
+      }
 
-    end
+    }
 
     r.assets
   end
+  # routes block end
 
   not_found do
     view "not_found"
+  end
+
+
+  error do |err|
+    # self.request.status_code = 500
+    puts "Error (catched by error_handler):"
+    puts err.backtrace
+    puts ""
+    view "error", locals: { error: err }
   end
 end
