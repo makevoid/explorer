@@ -12,6 +12,7 @@ class App < Roda
       "vendor/three.js",
       "vendor/three.flycontrols.js",
       "vendor/three.orbitcontrols.js",
+      "vendor/threex.domevent.js",
       "vendor/threex.dynamictexture.js",
     ],
   )
@@ -76,7 +77,6 @@ class App < Roda
       r.redirect "/blocks"
     }
 
-
     r.on("blocks_new") {
       r.is {
         r.get {
@@ -106,12 +106,12 @@ class App < Roda
         }
       }
 
-      r.on(":block_count") { |block_count|
+      r.on(":block_id") { |block_id|
         r.is {
           r.get {
             json_route
             w = keychain.dev
-            hash = w.getblockhash block_count.to_i
+            hash  = w.getblockhash block_id.to_i
             block = w.getblock hash
             { block: block }.to_json
           }
@@ -165,5 +165,6 @@ class App < Roda
     puts err.backtrace
     puts ""
     view "error", locals: { error: err }
+    raise
   end
 end

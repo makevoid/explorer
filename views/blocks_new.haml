@@ -1,15 +1,53 @@
+%script.txs_template{ type: "text/x-handlebars-template" }
+  :plain
+    <div class='transactions'>
+      <h4>Block: {{hash}}</h4>
+      <p>Time: {{time}}</p>
+      <p>Confirmations: {{confirmations}}</p>
+      <p>Size: {{size}}</p>
+      <h3>Transactions ({{tx_count}})</h3>
+      {{#each tx}}
+        <div class='tx'><a href='/txs/{{this}}'>{{this}}</a></div>
+      {{/each}}
+    </div>
 
 :css
   body, html, canvas {
     height: 100%;
     margin: 0px;
-    background-color: #333;
     overflow: hidden;
   }
 
 :coffee
   $ ->
     c = console
+
+    # modal - transactions
+
+    txs_template = $(".txs_template").html()
+    txs_template = Handlebars.compile txs_template
+
+    bindModalClose = ->
+      modal     = $ ".modal"
+      modalCont = $ ".modal-content"
+      closeBtn  = $ ".modal-close"
+      closeBtn.on "click", ->
+        _.delay ->
+          modal.hide()
+          modalCont.html = ""
+        , 400
+
+
+    loadTransactions = (id) ->
+      url = "/blocks/\#{id}"
+      $.getJSON url, (block) ->
+        block = block.block
+        # TODO: Extract in block presenter
+        block.hash = block.hash.replace /^0+/, ''
+        block.tx_count = block.tx.length
+        html = txs_template block
+        contElem = $ ".modal-content"
+        contElem.html html
 
     # data
 
@@ -18,76 +56,137 @@
 
     getBlocks = ->
       latest = getLatestBlock()
-      _.range(latest-5, latest)
+      _.range(latest-25, latest)
 
     # viz
 
     camera = undefined
     scene = undefined
     renderer = undefined
-    mesh = undefined
+    block = undefined
+    blocks = []
 
     renderer_defaults = (renderer) ->
-      renderer.setClearColor 0xAAAAAA, 1
+      renderer.setClearColor 0xffffff, 1
       renderer.setPixelRatio window.devicePixelRatio
       renderer.setSize window.innerWidth, window.innerHeight
 
+    addLights = (scene) ->
+      light = new THREE.DirectionalLight 0xffffff
+      light.position.set 0, 0, 1
+      scene.add light
+      light = new THREE.DirectionalLight 0xffffff
+      light.position.set 0, 8, 1
+      scene.add light
+      light = new THREE.DirectionalLight 0xffffff
+      light.position.set 0, -8, 1
+      scene.add light
+      light = new THREE.DirectionalLight 0xffffff
+      light.position.set -8, 0, 1
+      scene.add light
+      light = new THREE.DirectionalLight 0xffffff
+      light.position.set 8, 0, 1
+      scene.add light
 
     controls = (camera, domElement) ->
-      # ctrls = new THREE.FlyControls camera
-      # ctrls.movementSpeed = 1000
-      # ctrls.domElement = domElement
-      # ctrls.rollSpeed = Math.PI / 24
-      # ctrls.autoForward = false
-      # ctrls.dragToLook = false
-
       ctrls = new THREE.OrbitControls camera, domElement
       # ctrls.addEventListener( 'change', render ) # add this only if there is no animation loop (requestAnimationFrame)
       -# ctrls.addEventListener 'change', render
       ctrls.enableDamping = true
       ctrls.dampingFactor = 0.25
-      ctrls.enableZoom = false
+      ctrls.enableZoom = true
+
+    blockBoxShape = ->
+      new (THREE.BoxGeometry)(200, 200, 200)
+
+    blockPhongMaterial = (texture) ->
+      new THREE.MeshPhongMaterial
+        color:         0x999999
+        shading:      THREE.FlatShading
+        vertexColors: THREE.VertexColors
+        shininess:    40
+        map:          texture
+        transparent:  true
+
+    applyTextureFilters = (renderer, texture) ->
+      texture.anisotropy  = renderer.getMaxAnisotropy()
+      texture.needsUpdate = true
+
+    blockDynamicTexture = ->
+      dynamicTexture  = new THREEx.DynamicTexture 512, 512
+      dynamicTexture.context.font  = "bolder 90px Verdana";
+      dynamicTexture.clear '#003859'
+      dynamicTexture
 
     init = ->
-      camera = new (THREE.PerspectiveCamera)(70, window.innerWidth / window.innerHeight, 1, 1000)
-      camera.position.z = 800
+      camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 15000)
+      camera.position.z = 1400
+
+      # D = 1
+      # aspect = window.innerWidth / window.innerHeight
+      # camera = new THREE.OrthographicCamera(-D*aspect, D*aspect, D, -D, 1, 1000)
+
 
 
       scene = new (THREE.Scene)
+      addLights scene
 
-      latestBlock = getLatestBlock()
-      blocks      = getBlocks()
-      c.log latestBlock, blocks
+      latestBlockNum = getLatestBlock()
+      blockNums      = getBlocks()
+      c.log latestBlockNum, blockNums
 
-      light = new THREE.DirectionalLight 0xffffff
-      light.position.set 0, 0, 1
-      scene.add light
+      blockShape = blockBoxShape()
 
-      geometry = new (THREE.BoxGeometry)(200, 200, 200)
+      # loop blocks --
+      # _.extend before this
+      space = 400
+      start = -space * (blockNums.length - 2)
+      blockTexture = null
 
-      dynamicTexture  = new THREEx.DynamicTexture 512, 512
-      dynamicTexture.context.font  = "bolder 90px Verdana";
+      renderer = new THREE.WebGLRenderer
+      domEvent = new THREEx.DomEvents camera, renderer.domElement
 
-      material = new THREE.MeshBasicMaterial
-        # color:        0x00ffff
-        # wireframe:    false
-        # vertexColors: THREE.VertexColors
-        # transparent:  false
-        map:          dynamicTexture.texture
+      blockNums.forEach (blockNum, idx) ->
+        blockTexture = blockDynamicTexture()
+        # blockTexture = _.extend blockTexture
+        blockMaterial = blockPhongMaterial blockTexture.texture
+        blockTexture.drawText blockNum, undefined, 256, 'white'
+        block = new THREE.Mesh blockShape, blockMaterial
+        block.data = {}
+        block.data.num = blockNum
+        scene.add block
+        blocks.push block
 
-      dynamicTexture.clear('grey').drawText latestBlock, undefined, 256, 'white'
-      dynamicTexture.texture.needsUpdate  = true
+        posX = start + space * idx
+        block.position.set posX, 0, 0
+        domEvent.bind block, 'mouseover', (evt) ->
+          #evt.target.rotation.y = 200
+          elem = evt.target
+          elem.scale.set(1.2, 1.2, 1.2) unless elem.clicked
 
-      # material = new THREE.MeshPhongMaterial( { color: 0x00ffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 400 } )
+        domEvent.bind block, 'mouseout', (evt) ->
+          elem = evt.target
+          elem.scale.set(1, 1, 1) unless elem.clicked
+
+        # TODO: prevent double click (bug: block remains scaled 1.5)
+        domEvent.bind block, 'click', (evt) ->
+          elem = evt.target
+          for blk in blocks
+            if blk != block
+              blk.clicked = false
+              blk.scale.set 1, 1, 1
+          elem.clicked = true
+          elem.scale.set 1.5, 1.5, 1.5
+          loadTransactions(elem.data.num)
+          _.delay ->
+            modal.show()
+          , 400
+
+        # block.addEventListener 'click', (object3d) ->
+        #   console.log "asd"
 
 
-      # material = new THREE.MeshBasicMaterial( { color: 0x000000, shading: THREE.FlatShading, wireframe: true, transparent: true } )
-
-      mesh = new (THREE.Mesh)(geometry, material)
-      scene.add mesh
-      renderer = new (THREE.WebGLRenderer)
-      dynamicTexture.texture.anisotropy = renderer.getMaxAnisotropy()
-      dynamicTexture.texture.needsUpdate  = true
+      applyTextureFilters renderer, blockTexture.texture # TODO: check, otherwise apply to all the elements
       renderer_defaults renderer
 
       container = document.createElement 'div'
@@ -109,10 +208,44 @@
     animate = ->
       requestAnimationFrame animate
       -# mesh.rotation.x += 0.03
-      mesh.rotation.y += 0.003
+      for block in blocks
+        if block.clicked
+          block.rotation.y = 0
+        else
+          block.rotation.y += 0.0025
+
       -# mesh.rotation.z += 0.005
       renderer.render scene, camera
       return
 
     init()
     animate()
+
+    modal = $ ".modal"
+    # modal.show()
+    bindModalClose()
+
+    # nay
+
+    # fly controls
+    #
+    # ctrls = new THREE.FlyControls camera
+    # ctrls.movementSpeed = 1000
+    # ctrls.domElement = domElement
+    # ctrls.rollSpeed = Math.PI / 24
+    # ctrls.autoForward = false
+    # ctrls.dragToLook = false
+
+    # basic material
+    #
+    # material = new THREE.MeshBasicMaterial
+    #   # color:        0x00ffff
+    #   # wireframe:    false
+    #   # vertexColors: THREE.VertexColors
+    #   # transparent:  false
+    #   map:            blockTexture.texture
+
+    # misc
+    #
+    # blockMaterial = new THREE.MeshPhongMaterial( { color: 0x00ffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 400 } )
+    # blockMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, shading: THREE.FlatShading, wireframe: true, transparent: true } )

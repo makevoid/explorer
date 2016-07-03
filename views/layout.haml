@@ -8,22 +8,24 @@
 
   %body{ class: body_class }
     .container
-      .right.set_fonts
-        %a.btn{ data: {dir: "increase"} } +
-        \/
-        %a.btn{ data: {dir: "decrease"} } -
+      - unless request.path == "/blocks_new"
+        .right.set_fonts
+          %a.btn{ data: {dir: "increase"} } +
+          \/
+          %a.btn{ data: {dir: "decrease"} } -
 
-
-      %h1
-        %a{ href: "/" } #{title}
-      /
-        %nav
-          %a.btn{ href: "/blocks" } Blocks
+        %h1
+          %a{ href: "/" } #{title}
+        /
+          %nav
+            %a.btn{ href: "/blocks" } Blocks
 
       %section.content
         = assets :js
         = yield
-
+    .modal
+      %a.modal-close{ href: "javascript:void(0)" } X
+      .modal-content
     -# FIXME
     -#
     -# assets :js

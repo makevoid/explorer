@@ -149,3 +149,50 @@ input {
 .right {
   float: right;
 }
+
+/* modal */
+
+.modal {
+  height: 100%;
+  weight: 100%;
+  display: none;
+  background: #FAFAFA;
+  overflow: scroll;
+}
+
+.modal-close {
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  font-size: 2em;
+  color: #444;
+  padding: 5px 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+
+.modal-close:hover {
+  color: #222;
+  border: 1px solid #666;
+}
+
+/* transactions */
+
+.transactions .tx {
+  border-radius: 7px;
+  background: #EEE;
+  text-align: center;
+  padding: 5px 8px;
+  min-width: 600px;
+  margin-bottom: 15px;
+}
+
+.transactions .tx:hover {
+  background: #DDD;
+  cursor: pointer;
+}
+
+.modal .transactions {
+  margin: 0 12%;
+  margin-top: 50px;
+}

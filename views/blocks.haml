@@ -41,24 +41,13 @@
       <div class='tx'><a href='/txs/{{this}}'>{{this}}</a></div>
     {{/each}}
 
-:css
-  .transactions .tx {
-    border-radius: 7px;
-    background: #EEE;
-    text-align: center;
-    padding: 4px 5px;
-    min-width: 600px;
-    margin-bottom: 15px;
-  }
-  .transactions .tx:hover {
-    background: #DDD;
-    cursor: pointer;
-  }
+
 .transactions
 
 - content_for :js do
   - capture_haml do
     :coffee
+      # TODO: change name from .tx_template to .block_info
       tx_template = $(".tx_template").html()
       tx_template = Handlebars.compile(tx_template)
 
