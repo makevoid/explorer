@@ -1,6 +1,22 @@
 require 'tilt/haml'
 require_relative 'config/env'
 
+# TODO: move
+#
+# Bitcoin
+#
+#
+#
+# class Bitcoin
+#
+# ...
+
+class Bitcoin
+  def self.status
+    "synchronizing - x blocks remaining"
+  end
+end
+
 class App < Roda
   plugin(:assets,
     css: ["style.css"],

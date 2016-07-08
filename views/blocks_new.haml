@@ -1,5 +1,20 @@
 %script.txs_template{ type: "text/x-handlebars-template" }
   :plain
+    <style>
+      .status {
+
+      }
+      .wallet {
+
+      }
+    </style>
+    <div class='status'>
+      Synchronizing:  "X blocks left"
+    </div>
+    <div class='wallet'>
+      Wallet Balance: "x mBTC"
+    </div>
+  :plain
     <div class='transactions'>
       <h4>Block: {{hash}}</h4>
       <p>Time: {{time}}</p>
