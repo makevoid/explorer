@@ -116,21 +116,23 @@
 
     blockPhongMaterial = (texture) ->
       new THREE.MeshPhongMaterial
-        color:         0x999999
+        color:        new THREE.Color( 0xff9999 )
+        transparent:  true
         shading:      THREE.FlatShading
         vertexColors: THREE.VertexColors
         shininess:    40
         map:          texture
-        transparent:  true
 
     applyTextureFilters = (renderer, texture) ->
       texture.anisotropy  = renderer.getMaxAnisotropy()
       texture.needsUpdate = true
 
-    blockDynamicTexture = ->
+    blockDynamicTexture = (opacity) ->
       dynamicTexture  = new THREEx.DynamicTexture 512, 512
-      dynamicTexture.context.font  = "bolder 90px Verdana";
-      dynamicTexture.clear '#003859'
+      # dynamicTexture.context.font  = "bolder 90px Verdana";
+      dynamicTexture.context.font  = "bolder 40px Verdana";
+      # dynamicTexture.clear '#003859'
+      dynamicTexture.clear "rgba(0, 80, 180, \#{opacity || "0.2"})"
       dynamicTexture
 
     init = ->
@@ -165,7 +167,12 @@
         blockTexture = blockDynamicTexture()
         # blockTexture = _.extend blockTexture
         blockMaterial = blockPhongMaterial blockTexture.texture
-        blockTexture.drawText blockNum, undefined, 256, 'white'
+        -# blockTexture.drawText blockNum, undefined, 256, 'white'
+        blockNum = String(blockNum)
+        blockNum = "\#{blockNum[0..2]}.\#{blockNum[3..6]}"
+        -# blockNum = "\#{blockNum[0..2]},\#{blockNum[3..6]}"
+        blockTexture.drawText blockNum, undefined, 100, 'darkBlue'
+
         block = new THREE.Mesh blockShape, blockMaterial
         block.data = {}
         block.data.num = blockNum
@@ -177,13 +184,28 @@
         domEvent.bind block, 'mouseover', (evt) ->
           #evt.target.rotation.y = 200
           elem = evt.target
-          elem.scale.set(1.2, 1.2, 1.2) unless elem.clicked
+          return if elem.clicked
+          #
+          blockTexture = blockDynamicTexture(0.5)
+          blockMaterial = blockPhongMaterial blockTexture.texture
+          blockTexture.drawText elem.data.num, undefined, 100, 'black'
+          elem.material = blockMaterial
+          #
+          elem.scale.set(1.2, 1.2, 1.2)
 
         domEvent.bind block, 'mouseout', (evt) ->
           elem = evt.target
-          elem.scale.set(1, 1, 1) unless elem.clicked
+          return if elem.clicked
+          #
+          blockTexture = blockDynamicTexture()
+          blockMaterial = blockPhongMaterial blockTexture.texture
+          blockTexture.drawText elem.data.num, undefined, 100, 'darkBlue'
+          elem.material = blockMaterial
+          #
+          elem.scale.set(1, 1, 1)
 
         # TODO: prevent double click (bug: block remains scaled 1.5)
+        # TODO: fix - cancel click on drag - as the user is probably rotating the "viewport"
         domEvent.bind block, 'click', (evt) ->
           elem = evt.target
           for blk in blocks
@@ -194,7 +216,9 @@
           elem.scale.set 1.5, 1.5, 1.5
           loadTransactions(elem.data.num)
           _.delay ->
-            modal.show()
+            # modal.show()
+            modal.get(0).style.display = "block"
+            # modal.get(0).style.opacity = "0.1"
           , 400
 
         # block.addEventListener 'click', (object3d) ->
