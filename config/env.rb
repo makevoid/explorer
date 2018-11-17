@@ -8,32 +8,20 @@ APP_PATH = path
 
 DOCKER = ENV["DOCKER"] == "1"
 
-# RPC_HOST = '188.165.223.5' # sys.mkvd.net
-# RPC_HOST = '212.47.233.106' # bchain  # scaleway
 unless DOCKER
   RPC_HOST = 'localhost' # always localhost, localhost ftw!
-  RPC_HOST = '91.121.181.140'
-  RPC_PORT = 8332
 else
-  RPC_HOST = 'mkvd.eu.ngrok.io' # TODO: containerize bitcoin as well that downloads the chain via torrent (TODO: upload the chain to s3)
-  RPC_PORT = 80
+  RPC_HOST = '91.121.181.140'
 end
 
+RPC_PORT = 8332
 
 read = -> (path) { File.read File.expand_path path }
 
-# password = if APP_ENV == "development"
-#   path = "~/.sys.bitcoin.conf.pw"
-#   read.( path )
-# else
-
-  # local is better:
-
-  path = "~/.bitcoin/bitcoin.conf"
-  # path = "./config/.bitcoin-rpcpassword" if DOCKER
-  file = read.( path )
-  password = file.strip.match(/rpcpassword=(.+)/)[1]
-# end
+path = "~/.bitcoin/bitcoin.conf"
+# path = "./config/.bitcoin-rpcpassword" if DOCKER
+file = read.( path )
+password = file.strip.match(/rpcpassword=(.+)/)[1]
 
 # RPC_USER     = 'bitcoinrpc'
 RPC_USER     = 'bitcoin'
@@ -54,23 +42,8 @@ require_relative "../models/keychain"
 # require_relative "../lib/stuff"
 
 
-#--------------------------------#
-#
-#  Redis (using docker-compose)
-#
-#--------------------------------#
-
-
-REDIS_HOST = !DOCKER ? "localhost" : "redis"    # incredible, huh?
+REDIS_HOST = !DOCKER ? "localhost" : "redis"
 REDIS_PORT = 6379
-
-#--------------------------------#
-#
-#  via docker-compose:
-#
-#    dc build && dc up
-#
-#--------------------------------#
 
 REDIS = unless DOCKER
   Redis.new
@@ -78,4 +51,4 @@ else
   Redis.new host: REDIS_HOST, port: REDIS_PORT
 end
 
-R = REDIS # shortcut
+R = REDIS # alias
