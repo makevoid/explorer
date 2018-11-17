@@ -29,7 +29,7 @@ read = -> (path) { File.read File.expand_path path }
   # local is better:
 
   path = "~/.bitcoin/bitcoin.conf"
-  path = "./config/.bitcoin-rpcpassword" if DOCKER
+  # path = "./config/.bitcoin-rpcpassword" if DOCKER
   file = read.( path )
   password = file.strip.match(/rpcpassword=(.+)/)[1]
 # end

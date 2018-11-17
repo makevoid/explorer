@@ -39,6 +39,8 @@ class App < Roda
   plugin :error_handler
   # plugin :content_for
 
+  plugin :public
+
   # TODO: move in helpers
 
   def json_route
@@ -89,17 +91,56 @@ class App < Roda
   route do |r|
     @time = Time.now
 
+    r.public if APP_ENV == "development"
+
     r.root {
       r.redirect "/blocks"
     }
 
-    r.on("blocks_new") {
+    # r.on("blocks_new") {
+    #   r.is {
+    #     r.get {
+    #       w = keychain.dev
+    #       block_count = w.getblockcount
+    #       hash = w.getblockhash block_count
+    #       view "blocks_new", locals: {
+    #         w:           w,
+    #         block_count: block_count,
+    #         hash:        hash,
+    #       }
+    #     }
+    #   }
+    # }
+
+    r.on("api") {
+      json_route
+
+      r.is('blocks', Integer) { |block_id|
+        r.get {
+          w = keychain.dev
+          hash  = w.getblockhash block_id
+          block = w.getblock hash
+          { block: block }.to_json
+        }
+      }
+
+      r.is('blocks_latest_num') {
+        r.get {
+          w = keychain.dev
+          block_count = w.getblockcount
+          { block_num: block_count }.to_json
+        }
+      }
+
+    }
+
+    r.is('blocks', Integer) { |block_id|
       r.is {
         r.get {
           w = keychain.dev
           block_count = w.getblockcount
-          hash = w.getblockhash block_count
-          view "blocks_new", locals: {
+          hash = w.getblockhash block_id
+          view "blocks", locals: {
             w:           w,
             block_count: block_count,
             hash:        hash,
@@ -122,27 +163,27 @@ class App < Roda
         }
       }
 
-      r.on(":block_id") { |block_id|
+      r.on("hashes") { |hash|
         r.is {
-          r.get {
-            json_route
-            w = keychain.dev
-            hash  = w.getblockhash block_id.to_i
-            block = w.getblock hash
-            { block: block }.to_json
+          r.on(":block_hash") { |block_hash|
+            r.get {
+              w = keychain.dev
+              block_count = w.getblockcount
+              view "blocks", locals: {
+                w:           w,
+                block_count: block_count,
+                hash:        block_hash,
+              }
+            }
           }
         }
       }
     }
 
-    r.on("txs") {
-      r.on(":tx_id") { |tx_id|
-        r.is {
-          r.get {
-            @tx_id = tx_id
-            view "tx"
-          }
-        }
+    r.is('txs', String) { |tx_id|
+      r.get {
+        @tx_id = tx_id
+        view "tx"
       }
     }
 
