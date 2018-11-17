@@ -36,7 +36,7 @@
     <h4>Block info:</h4>
     <p>Time: {{time}}</p>
     <p>Confirmations: {{confirmations}}</p>
-    <p>Size: {{size}}</p>
+    <p>Size: {{size}} bytes</p>
     <h4>Transactions ({{tx_count}})</h4>
     {{#each tx}}
       <div class='tx'><a href='/txs/{{this}}'>{{this}}</a></div>
@@ -45,9 +45,13 @@
 
 .transactions
 
+%a.load_more.btn{ href: js_void } Load more...
+
 - content_for :js do
   - capture_haml do
     :coffee
+
+      window.block_cache = {}
 
       window.onpopstate = (evt) ->
         state = evt.state
@@ -66,15 +70,27 @@
           block_num = data.block_num
           load_transactions block_num
 
+      render_transactions = (block) ->
+        html = tx_template block
+        $(".transactions").html html
+        $(".hash").html block.hash.replace /^0+/, ''
+        $(".block_number").html block.num
+
       load_transactions = (block_num) ->
         $.getJSON "/api/blocks/"+block_num, (data) ->
           # console.log "got block", data
           block = data.block
+          block.num = block_num
           block.tx_count = block.tx.length
-          html = tx_template block
-          $(".transactions").html html
-          $(".hash").html block.hash.replace /^0+/, ''
-          $(".block_number").html block_num
+          block.size = s.numberFormat block.size
+          window.block_cache = _.clone block
+          block.tx = block.tx[0..16]
+          render_transactions block
+
+      $(".load_more").on "click", (evt) ->
+        elem = evt.target
+        $(elem).hide()
+        render_transactions window.block_cache
 
       $(".block").on "click", (evt) ->
         elem = evt.target
@@ -85,6 +101,7 @@
 
       load_transactions $('.blocks_data').data("latest-block")
 
-%p page rendering time: #{Time.now - @time}
+- if APP_ENV == "development"
+  %p page rendering time: #{((Time.now - @time) * 1000).to_i}ms
 
 -# txs = w.listsinceblock

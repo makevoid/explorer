@@ -23,13 +23,14 @@ class App < Roda
     js:  [
       "vendor/zepto.js",
       "vendor/underscore.js",
-      "vendor/qrcode.js",
+      "vendor/underscore.string.js",
+      # "vendor/qrcode.js",
       "vendor/handlebars.js",
-      "vendor/three.js",
-      "vendor/three.flycontrols.js",
-      "vendor/three.orbitcontrols.js",
-      "vendor/threex.domevent.js",
-      "vendor/threex.dynamictexture.js",
+      # "vendor/three.js",
+      # "vendor/three.flycontrols.js",
+      # "vendor/three.orbitcontrols.js",
+      # "vendor/threex.domevent.js",
+      # "vendor/threex.dynamictexture.js",
     ],
   )
 
@@ -129,6 +130,13 @@ class App < Roda
           w = keychain.dev
           block_count = w.getblockcount
           { block_num: block_count }.to_json
+        }
+      }
+
+      r.is('txs', String) { |tx_id|
+        r.get {
+          tx = keychain.get_transaction tx_id
+          { tx: tx }.to_json
         }
       }
 

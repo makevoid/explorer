@@ -12,6 +12,7 @@ DOCKER = ENV["DOCKER"] == "1"
 # RPC_HOST = '212.47.233.106' # bchain  # scaleway
 unless DOCKER
   RPC_HOST = 'localhost' # always localhost, localhost ftw!
+  RPC_HOST = '91.121.181.140'
   RPC_PORT = 8332
 else
   RPC_HOST = 'mkvd.eu.ngrok.io' # TODO: containerize bitcoin as well that downloads the chain via torrent (TODO: upload the chain to s3)

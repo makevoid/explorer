@@ -183,7 +183,8 @@ input {
 
 /* transactions */
 
-.transactions .tx {
+.transactions .tx a  {
+  display: block;
   border-radius: 7px;
   background: #EEE;
   text-align: center;
@@ -192,7 +193,7 @@ input {
   margin-bottom: 15px;
 }
 
-.transactions .tx:hover {
+.transactions .tx a:hover {
   background: #DDD;
   cursor: pointer;
 }
