@@ -1,15 +1,37 @@
 version: '2'
 services:
-  web:
-    build: .
+  explorer:
+    image: makevoid/explorer
+    stdin_open: true
+    tty: true
+    build:
+      context: .
     ports:
-     - "4567:4567"
-    volumes:
-     - .:/app
-    depends_on:
-     - redis
-  redis:
-    image: redis
+    - 3000:80/tcp
+    labels:
+      io.rancher.container.pull_image: always
+  explorer-lb:
+    image: rancher/lb-service-haproxy:v0.7.15
+    ports:
+    - 3000:3000/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin,agent
+      io.rancher.container.agent_service.drain_provider: 'true'
+      io.rancher.container.create_agent: 'true'
+#
+#
+# version: '2'
+# services:
+#   web:
+#     build: .
+#     ports:
+#      - "4567:4567"
+#     volumes:
+#      - .:/app
+#     depends_on:
+#      - redis
+#   redis:
+#     image: redis
 
 # to run this:
 #
