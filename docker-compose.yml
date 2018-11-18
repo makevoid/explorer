@@ -4,8 +4,8 @@ services:
     image: makevoid/explorer
     stdin_open: true
     tty: true
-    build:
-      context: .
+    # build:
+    #   context: .
     ports:
     - 3100:3000/tcp
     environment:
@@ -24,29 +24,3 @@ services:
       io.rancher.container.agent.role: environmentAdmin,agent
       io.rancher.container.agent_service.drain_provider: 'true'
       io.rancher.container.create_agent: 'true'
-#
-#
-# version: '2'
-# services:
-#   web:
-#     build: .
-#     ports:
-#      - "4567:4567"
-#     volumes:
-#      - .:/app
-#     depends_on:
-#      - redis
-#   redis:
-#     image: redis
-
-# to run this:
-#
-#   # (alias)
-#
-#   alias dc=docker-compose
-#
-#   # run
-#
-#   dc build && dc up
-#
-##
