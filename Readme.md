@@ -1,10 +1,8 @@
-# Blockchain Visualization
+# Blockchain Explorer (BTC, BCH, BCH-SV, LTC, DOGE etc. compatible)
 
-Simple Blockchain Visualization based off Bitcoin Core JSON RPC API.
+Based off Bitcoin Core JSON RPC API.
 
 Uses bitcoin's JSON RPC API, you need `bitcoind` / `bitcoin-qt` running in the background.
-
-Forked from Blockchain App Template `makevoid/roda_bitcoin`.
 
 
 # Setup
@@ -19,3 +17,12 @@ Forked from Blockchain App Template `makevoid/roda_bitcoin`.
 or
 
     rackup
+
+
+# Docker
+
+Build locally:
+
+   docker-compose up --build
+   
+Get it from Dockerhub: https://hub.docker.com/r/makevoid/explorer
