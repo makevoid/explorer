@@ -4,8 +4,8 @@ services:
     image: makevoid/explorer
     stdin_open: true
     tty: true
-    # build:
-    #   context: .
+    build:
+      context: .
     ports:
     - 3100:3000/tcp
     environment:

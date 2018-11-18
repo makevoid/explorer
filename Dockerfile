@@ -1,6 +1,11 @@
 FROM makevoid/ruby-coffee as builder
 
-ADD .bundle   /app/
+WORKDIR /app
+
+RUN mkdir -p /app/.bundle
+
+ADD .bundle/config-docker .bundle/config
+
 ADD Gemfile*  /app/
 RUN bundle --deployment
 
