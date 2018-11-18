@@ -7,7 +7,18 @@ body {
   width: 90%;
   margin: 0 auto;
 }
+
 .content {
+
+}
+
+.inline {
+  display: inline-block !important;
+  width: auto !important;
+}
+
+.btn-big {
+  font-size: 1.6em;
 }
 
 a {
