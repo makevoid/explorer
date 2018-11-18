@@ -41,7 +41,8 @@
     - if script.addresses && address = script.addresses.first
       to #{address}
 
-
+  -# # support multiple addresses
+  -#
   -# - if script.addresses
   -#   %p.b
   -#     Addresses:
@@ -49,10 +50,6 @@
   -#     - script.addresses.map do |address|
   -#       %li #{address}
   -# .s10
-
-  -# - content_for :js do
-  -#   - capture_haml do
-  -#     :coffee
 
   -# %p.b
   -#   Script:

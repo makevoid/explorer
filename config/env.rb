@@ -8,7 +8,7 @@ APP_PATH = path
 
 DOCKER = ENV["DOCKER"] == "1"
 
-RPC_HOST = '91.121.181.140'
+RPC_HOST = ENV["BTC_RPC_HOST"] || '91.121.181.140'
 
 RPC_PORT = 8332
 
@@ -23,7 +23,7 @@ else
 end
 
 # RPC_USER     = 'bitcoinrpc'
-RPC_USER     = 'bitcoin'
+RPC_USER     = ENV["BTC_RPC_USERNAME"] || 'bitcoin'
 RPC_PASSWORD = password.strip
 
 # TODO:

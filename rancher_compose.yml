@@ -3,6 +3,9 @@ services:
   explorer:
     scale: 2
     start_on_create: true
+  redis:
+    scale: 2
+    start_on_create: true
   explorer-lb:
     scale: 2
     start_on_create: true
@@ -15,7 +18,7 @@ services:
         protocol: http
         service: explorer
         source_port: 3101
-        target_port: 3101
+        target_port: 3100
     health_check:
       healthy_threshold: 2
       response_timeout: 2000
