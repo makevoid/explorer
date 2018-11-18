@@ -139,6 +139,10 @@ input {
   color: #236fb2;
 }
 
+.line.short {
+  min-width: 20px;
+}
+
 .line, .line_dot {
   border-top: 3px solid #236fb2;
   position: relative;
@@ -150,7 +154,6 @@ input {
 
 .line_dot {
   border-top: 3px dashed #236fb2;
-
 }
 
 .spacer_viz {

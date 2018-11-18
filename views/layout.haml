@@ -27,26 +27,9 @@
 
   %body{ class: body_class }
     .container
-      -# TODO: remove
-      -#
-      -# - unless request.path == "/blocks_new"
-      -#   .right{ style: { :"text-align" =>"right" } }
-      -#     /
-      -#     .three-d.set_fonts
-      -#       .status
-      -#         #{Bitcoin.status}
-      -#       -# .set_fonts
-      -#     %a.right.inline.btn{ data: {dir: "decrease"} } -
-      -#     .right.inline \/
-      -#     %a.right.inline.btn{ data: {dir: "increase"} } +
-      -#     %a.right.inline.btn.button.btn-big{ href: "/blocks_new" } 3D
-
       %h1
         %a{ href: "/" } #{title}
-      /
-        %nav
-          %a.btn{ href: "/blocks" } Blocks
-
+      .s20
       %section.content
         = assets :js
         = yield
