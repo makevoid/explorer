@@ -30,7 +30,6 @@
 
 .blocks_data.hidden{ data: { latest_block: block_count }, type: "text/x-handlebars-template" }
 
-
 -# TODO: add moment.js for the time.ago
 %script.tx_template{ type: "text/x-handlebars-template" }
   :plain
@@ -42,7 +41,6 @@
     {{#each tx}}
       <div class='tx'><a href='/txs/{{this}}'>{{this}}</a></div>
     {{/each}}
-
 
 .transactions
 
