@@ -1,2 +1,3 @@
 config/.bitcoin-rpcpassword
 dump.rdb
+*.secret
