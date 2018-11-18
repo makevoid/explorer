@@ -8,20 +8,19 @@ APP_PATH = path
 
 DOCKER = ENV["DOCKER"] == "1"
 
-unless DOCKER
-  RPC_HOST = 'localhost' # always localhost, localhost ftw!
-else
-  RPC_HOST = '91.121.181.140'
-end
+RPC_HOST = '91.121.181.140'
 
 RPC_PORT = 8332
 
-read = -> (path) { File.read File.expand_path path }
-
-path = "~/.bitcoin/bitcoin.conf"
-# path = "./config/.bitcoin-rpcpassword" if DOCKER
-file = read.( path )
-password = file.strip.match(/rpcpassword=(.+)/)[1]
+password = if DOCKER
+  ENV["BITCOIN_RPCPASS"]
+else
+  # "hack" to load file locally from bitcoin.conf
+  read = -> (path) { File.read File.expand_path path }
+  path = "~/.bitcoin/bitcoin.conf"
+  file = read.( path )
+  file.strip.match(/rpcpassword=(.+)/)[1]
+end
 
 # RPC_USER     = 'bitcoinrpc'
 RPC_USER     = 'bitcoin'

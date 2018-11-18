@@ -1,5 +1,6 @@
-PATH
-  remote: ../bitcoin-client
+GIT
+  remote: https://github.com/makevoid/bitcoin-client.git
+  revision: c9e0be12979cd923c67af6e36722d9e798a92265
   specs:
     bitcoin-client (0.0.4)
       rest-client
