@@ -9,6 +9,7 @@ services:
     ports:
     - 3100:3000/tcp
     environment:
+      - DOCKER=1
       - BITCOIN_RPCPASS=$BITCOIN_RPCPASS
     labels:
       io.rancher.container.pull_image: always
