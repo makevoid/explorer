@@ -151,6 +151,7 @@ class App < Roda
           view "blocks", locals: {
             w:           w,
             block_count: block_count,
+            block_curr:  block_id,
             hash:        hash,
           }
         }
@@ -166,6 +167,7 @@ class App < Roda
           view "blocks", locals: {
             w:           w,
             block_count: block_count,
+            block_curr:  block_count,
             hash:        hash,
           }
         }

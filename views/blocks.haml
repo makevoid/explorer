@@ -4,20 +4,34 @@
 -# .s20
 .clear
 
+
+:ruby
+  max_blocks = 4
+  back_max_blocks = block_curr + max_blocks < block_count
+
 .abso
   .line
   .line.short
-  .block{ data: { block_count: block_count-4 } }= block_count-4
-  .line
-  .block{ data: { block_count: block_count-3 } }= block_count-3
-  .line
-  .block{ data: { block_count: block_count-2 } }= block_count-2
-  .line
-  .block{ data: { block_count: block_count-1 } }= block_count-1
-  .line
-  .block{ data: { block_count: block_count   }  }= block_count
-  .line_dot
-  .block_dot
+  - if back_max_blocks
+    .block.block_prev{ data: { block_count: block_curr-1 } } < prev
+    .line
+    .block.block_curr{ data: { block_count: block_curr } }= block_curr
+    .line
+    .block.block_next{ data: { block_count: block_curr+1 } } next >
+    .line
+    .line_dot
+  - else
+    .block{ data: { block_count: block_count-4 } }= block_count-4
+    .line
+    .block{ data: { block_count: block_count-3 } }= block_count-3
+    .line
+    .block{ data: { block_count: block_count-2 } }= block_count-2
+    .line
+    .block{ data: { block_count: block_count-1 } }= block_count-1
+    .line
+    .block{ data: { block_count: block_count   }  }= block_count
+    .line_dot
+    .block_dot
 .spacer_viz
 
 %h3
