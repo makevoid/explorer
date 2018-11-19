@@ -7,25 +7,6 @@
     %title #{title}
     = assets :css
 
-    :ruby
-      def space(spacing=80, spacingV=35)
-        spacingV = ", #{spacingV}" if spacingV
-        space = "#{spacing}#{spacingV}"
-        "
-        height:  #{space}px;
-        margin:  #{space}px;
-        padding: #{space}px;
-        "
-      end
-
-    :css
-      .container > .right,
-      .container > nav a, {
-        #{space 0, 50}
-        width: 0;
-      }
-
-
   %body{ class: body_class }
     .container
       %h1

@@ -8,6 +8,16 @@ body {
   margin: 0 auto;
 }
 
+.container > .right,
+.container > nav a, {
+
+  height:  0, 50px;
+  margin:  0, 50px;
+  padding: 0, 50px;
+
+  width: 0;
+}
+
 .content {
 
 }
