@@ -24,8 +24,8 @@ class App < Roda
       "vendor/zepto.js",
       "vendor/underscore.js",
       "vendor/underscore.string.js",
-      # "vendor/qrcode.js",
       "vendor/handlebars.js",
+      "blocks.js",
       # "vendor/three.js",
       # "vendor/three.flycontrols.js",
       # "vendor/three.orbitcontrols.js",
@@ -42,14 +42,14 @@ class App < Roda
 
   plugin :public
 
+  plugin :caching
+
+  use Rack::Deflater
+
   # TODO: move in helpers
 
   def json_route
     response['Content-Type'] = 'application/json'
-  end
-
-  def keychain
-    @@keychain ||= Keychain.new
   end
 
   def params
@@ -101,11 +101,11 @@ class App < Roda
     # r.on("blocks_new") {
     #   r.is {
     #     r.get {
-    #       w = keychain.dev
-    #       block_count = w.getblockcount
-    #       hash = w.getblockhash block_count
+
+    #       block_count = BLOCKS_COUNT.()
+    #       hash = CORE.block_hash block_count
     #       view "blocks_new", locals: {
-    #         w:           w,
+
     #         block_count: block_count,
     #         hash:        hash,
     #       }
@@ -113,29 +113,43 @@ class App < Roda
     #   }
     # }
 
+    CORE = Core.new
+
+    cache = -> (cache_key, function, time) {
+      if R.get cache_key
+        R.get cache_key
+      else
+        value = function.()
+        R.setex cache_key, time, value
+        value
+      end
+    }
+
+    BLOCKS_COUNT = -> { cache.("cache:blocks_count", -> { CORE.blocks_count }, 360).to_i } # 3 minutes
+
     r.on("api") {
       json_route
 
       r.is('blocks', Integer) { |block_id|
         r.get {
-          w = keychain.dev
-          hash  = w.getblockhash block_id
-          block = w.getblock hash
+          hash  = CORE.block_hash block_id
+          r.etag hash, weak: true
+          block = CORE.block hash
           { block: block }.to_json
         }
       }
 
       r.is('blocks_latest_num') {
         r.get {
-          w = keychain.dev
-          block_count = w.getblockcount
+          CORE = keychain.dev
+          block_count = BLOCKS_COUNT.()
           { block_num: block_count }.to_json
         }
       }
 
       r.is('txs', String) { |tx_id|
         r.get {
-          tx = keychain.get_transaction tx_id
+          tx = CORE.get_transaction tx_id
           { tx: tx }.to_json
         }
       }
@@ -145,11 +159,9 @@ class App < Roda
     r.is('blocks', Integer) { |block_id|
       r.is {
         r.get {
-          w = keychain.dev
-          block_count = w.getblockcount
-          hash = w.getblockhash block_id
+          block_count = BLOCKS_COUNT.()
+          hash = CORE.block_hash block_id
           view "blocks", locals: {
-            w:           w,
             block_count: block_count,
             block_curr:  block_id,
             hash:        hash,
@@ -161,11 +173,9 @@ class App < Roda
     r.on("blocks") {
       r.is {
         r.get {
-          w = keychain.dev
-          block_count = w.getblockcount
-          hash = w.getblockhash block_count
+          block_count = BLOCKS_COUNT.()
+          hash = CORE.block_hash block_count
           view "blocks", locals: {
-            w:           w,
             block_count: block_count,
             block_curr:  block_count,
             hash:        hash,
@@ -177,10 +187,8 @@ class App < Roda
         r.is {
           r.on(":block_hash") { |block_hash|
             r.get {
-              w = keychain.dev
-              block_count = w.getblockcount
+              block_count = BLOCKS_COUNT.()
               view "blocks", locals: {
-                w:           w,
                 block_count: block_count,
                 hash:        block_hash,
               }

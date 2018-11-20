@@ -16,3 +16,8 @@ gem "coffee-script"
 group :development, :production do
   gem "puma"
 end
+
+group :development do
+  gem "guard"
+  gem "guard-coffeescript"
+end

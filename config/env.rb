@@ -31,7 +31,7 @@ RPC_PASSWORD = password.strip
 # rescue BitcoinClient::Errors::RPCError
 
 # models
-require_relative "../models/keychain"
+require_relative "../models/core"
 
 REDIS_HOST = !DOCKER ? "localhost" : "redis"
 REDIS_PORT = 6379

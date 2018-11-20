@@ -13,22 +13,23 @@
         %a{ href: "/" } #{title}
       .s20
       %section.content
-        = assets :js
         = yield
     .modal
       %a.modal-close{ href: "javascript:void(0)" } X
       .modal-content
     -# FIXME
     -#
-    -# assets :js
-    = content_for :js
-    :coffee
-      curSize = 14
-      $(".set_fonts .btn").on "click", (evt) ->
-        console.log evt.target.dataset
-        if (evt.target.dataset.dir == "increase")
-          curSize += 2
-        else
-          curSize -= 2
 
-        $('.container').css 'font-size', curSize
+    %script.tx_template{ type: "text/x-handlebars-template" }
+      :plain
+        <h4>Block info:</h4>
+        <p>Time: {{time}}</p>
+        <p>Confirmations: {{confirmations}}</p>
+        <p>Size: {{size}} bytes</p>
+        <h4>Transactions ({{tx_count}})</h4>
+        {{#each tx}}
+          <div class='tx'><a href='/txs/{{this}}'>{{this}}</a></div>
+        {{/each}}
+        
+    = assets :js
+    = content_for :js

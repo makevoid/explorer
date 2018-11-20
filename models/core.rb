@@ -2,8 +2,12 @@ require 'json'
 require_relative 'transaction'
 require_relative 'raw_transaction'
 
+# Core - Bitcoin Core RPC wrapper
 
-class Keychain
+class Core
+
+  attr_reader :client
+
   def initialize
     @client = BitcoinClient::Client.new RPC_USER, RPC_PASSWORD, {
       host:   RPC_HOST,
@@ -56,13 +60,17 @@ class Keychain
     tx.get
   end
 
-  # if APP_ENV == "development"
-    # shortcircuit api - FIXME? or not
+  def blocks_count
+    @client.getblockcount
+  end
 
-    def dev
-      @client
-    end
-  # end
+  def block_hash(block_number)
+    @client.getblockhash block_number
+  end
+
+  def block(block_hash)
+    @client.getblock block_hash
+  end
 
   private
 

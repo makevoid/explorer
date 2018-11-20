@@ -1,127 +1,51 @@
-%script{ type: "text/javascript" }
-  :plain
-    window.block_curr = #{defined?(block_curr) ? block_curr : "null"}
+.page.blocks
 
-:ruby
-  max_blocks = 4
-  back_max_blocks = block_curr + max_blocks < block_count
+  %script{ type: "text/javascript" }
+    :plain
+      window.block_curr = #{defined?(block_curr) ? block_curr : "null"}
 
-.abso
-  .line
-  .line.short
-  - if back_max_blocks
-    .block.block_prev{ data: { block_count: block_curr-1 } } < prev
+  :ruby
+    max_blocks = 4
+    back_max_blocks = block_curr + max_blocks < block_count
+
+  .abso
     .line
-    .block.block_curr{ data: { block_count: block_curr } }= block_curr
-    .line
-    .block.block_next{ data: { block_count: block_curr+1 } } next >
-    .line
-    .line_dot
-  - else
-    .block.block_btn{ data: { block_count: block_count-4 } }= block_count-4
-    .line
-    .block.block_btn{ data: { block_count: block_count-3 } }= block_count-3
-    .line
-    .block.block_btn{ data: { block_count: block_count-2 } }= block_count-2
-    .line
-    .block.block_btn{ data: { block_count: block_count-1 } }= block_count-1
-    .line
-    .block.block_btn{ data: { block_count: block_count   }  }= block_count
-    .line_dot
-    .block_dot
-.spacer_viz
+    .line.short
+    - if back_max_blocks
+      .block.block_prev{ data: { block_count: block_curr-1 } } < prev
+      .line
+      .block.block_curr{ data: { block_count: block_curr } }= block_curr
+      .line
+      .block.block_next{ data: { block_count: block_curr+1 } } next >
+      .line
+      .line_dot
+    - else
+      .block.block_btn{ data: { block_count: block_count-4 } }= block_count-4
+      .line
+      .block.block_btn{ data: { block_count: block_count-3 } }= block_count-3
+      .line
+      .block.block_btn{ data: { block_count: block_count-2 } }= block_count-2
+      .line
+      .block.block_btn{ data: { block_count: block_count-1 } }= block_count-1
+      .line
+      .block.block_btn{ data: { block_count: block_count   }  }= block_count
+      .line_dot
+      .block_dot
+  .spacer_viz
 
-%h3
-  %span Block:
-  %span.block_number
-    = block_count
-  %span -
-  %span.hash
-    #{hash.sub /^0+/, ''}
+  %h3
+    %span Block:
+    %span.block_number
+      = block_count
+    %span -
+    %span.hash
+      #{hash.sub /^0+/, ''}
 
--# TODO: add moment.js for the time.ago
-%script.tx_template{ type: "text/x-handlebars-template" }
-  :plain
-    <h4>Block info:</h4>
-    <p>Time: {{time}}</p>
-    <p>Confirmations: {{confirmations}}</p>
-    <p>Size: {{size}} bytes</p>
-    <h4>Transactions ({{tx_count}})</h4>
-    {{#each tx}}
-      <div class='tx'><a href='/txs/{{this}}'>{{this}}</a></div>
-    {{/each}}
+  -# TODO: add moment.js for the time.ago
 
-.transactions
+  .transactions
 
-%a.load_more.btn{ href: js_void, class: "hidden" } Load more...
+  %a.load_more.btn{ href: js_void, class: "hidden" } Load more...
 
-- content_for :js do
-  - capture_haml do
-    :coffee
-      # TODO: extract coffee
-
-      window.block_cache = {}
-
-      window.onpopstate = (evt) ->
-        state = evt.state
-        block_num = state.block_num if state
-        unless block_num
-          load_latest_block()
-        else
-          load_transactions block_num
-
-      # TODO: change name from .tx_template to .block_info
-      tx_template = $(".tx_template").html()
-      tx_template = Handlebars.compile(tx_template)
-
-      load_latest_block = (block_num) ->
-        $.getJSON "/api/blocks_latest_num", (data) ->
-          block_num = data.block_num
-          load_transactions block_num
-
-      render_transactions = (block) ->
-        html = tx_template block
-        $(".transactions").html html
-        $(".hash").html block.hash.replace /^0+/, ''
-        $(".block_number").html block.num
-
-      load_transactions = (block_num) ->
-        console.log("load_transactions \#{block_num}")
-        $.getJSON "/api/blocks/"+block_num, (data) ->
-          # console.log "got block", data
-          block = data.block
-          block.num = block_num
-          block.tx_count = block.tx.length
-          block.size = s.numberFormat block.size
-          window.block_cache = _.clone block
-          block.tx = block.tx[0..16]
-          render_transactions block
-
-      $(".load_more").on "click", (evt) ->
-        elem = evt.target
-        $(elem).hide()
-        render_transactions window.block_cache
-
-      $(".block_prev").on "click", (evt) ->
-        window.block_curr = window.block_curr-1
-        $(".block_curr").html(window.block_curr)
-        load_transactions window.block_curr
-
-      $(".block_next").on "click", (evt) ->
-        window.block_curr = window.block_curr+1
-        $(".block_curr").html(window.block_curr)
-        load_transactions window.block_curr
-
-      $(".block_btn").on "click", (evt) ->
-        elem = evt.target
-        block_count = elem.dataset.blockCount
-        block_num = block_count
-        load_transactions block_num
-        history.pushState({ block_num: block_num }, "Block #\#{block_num}", "/blocks/\#{block_num}")
-
-      load_transactions window.block_curr
-
-- if APP_ENV == "development"
-  %p page rendering time: #{((Time.now - @time) * 1000).to_i}ms
-
--# txs = w.listsinceblock
+  - if APP_ENV == "development"
+    %p page rendering time: #{((Time.now - @time) * 1000).to_i}ms
