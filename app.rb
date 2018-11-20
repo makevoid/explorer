@@ -1,22 +1,6 @@
 require 'tilt/haml'
 require_relative 'config/env'
 
-# TODO: move
-#
-# Bitcoin
-#
-#
-#
-# class Bitcoin
-#
-# ...
-
-class Bitcoin
-  def self.status
-    "synchronizing - x blocks remaining"
-  end
-end
-
 class App < Roda
   plugin(:assets,
     css: ["style.css"],
@@ -26,11 +10,6 @@ class App < Roda
       "vendor/underscore.string.js",
       "vendor/handlebars.js",
       "blocks.js",
-      # "vendor/three.js",
-      # "vendor/three.flycontrols.js",
-      # "vendor/three.orbitcontrols.js",
-      # "vendor/threex.domevent.js",
-      # "vendor/threex.dynamictexture.js",
     ],
   )
 
@@ -100,22 +79,7 @@ class App < Roda
       r.redirect "/blocks"
     }
 
-    # r.on("blocks_new") {
-    #   r.is {
-    #     r.get {
-
-    #       block_count = BLOCKS_COUNT.()
-    #       hash = CORE.block_hash block_count
-    #       view "blocks_new", locals: {
-
-    #         block_count: block_count,
-    #         hash:        hash,
-    #       }
-    #     }
-    #   }
-    # }
-
-    CORE = Core.new
+    CORE = Core.new unless defined?(CORE)
 
     cache = -> (cache_key, function, time) {
       if R.get cache_key
@@ -127,7 +91,8 @@ class App < Roda
       end
     }
 
-    BLOCKS_COUNT = -> { cache.("cache:blocks_count", -> { CORE.blocks_count }, 360).to_i } # 3 minutes
+    THREE_MINS = 360 unless defined?(THREE_MINS) # 3 minutes
+    BLOCKS_COUNT = -> { cache.("cache:blocks_count", -> { CORE.blocks_count }, THREE_MINS).to_i } unless defined?(BLOCKS_COUNT)
 
     r.on("api") {
       json_route
@@ -234,15 +199,12 @@ class App < Roda
 
     r.assets
   end
-  # routes block end
 
   not_found do
     view "not_found"
   end
 
   error do |err|
-
-    # self.request.status_code = 500
     puts "Error (catched by error_handler):"
     puts err.backtrace
     puts ""
