@@ -108,7 +108,6 @@ class App < Roda
 
       r.is('blocks_latest_num') {
         r.get {
-          CORE = keychain.dev
           block_count = BLOCKS_COUNT.()
           { block_num: block_count }.to_json
         }
@@ -172,8 +171,8 @@ class App < Roda
 
     r.is('txs', String) { |tx_id|
       r.get {
-        @tx_id = tx_id
-        view "tx"
+        tx = CORE.get_transaction tx_id
+        view "tx", locals: { tx: tx, tx_id: tx_id }
       }
     }
 
