@@ -38,6 +38,8 @@ class App < Roda
   plugin :partials
   plugin :not_found
   plugin :error_handler
+  plugin :halt
+  plugin :symbol_views
   # plugin :content_for
 
   plugin :public
@@ -171,9 +173,15 @@ class App < Roda
     }
 
     r.on("blocks") {
+
+      begin
+        block_count = BLOCKS_COUNT.()
+      rescue Errno::ECONNREFUSED => e
+        r.halt :error
+      end
+
       r.is {
         r.get {
-          block_count = BLOCKS_COUNT.()
           hash = CORE.block_hash block_count
           view "blocks", locals: {
             block_count: block_count,
@@ -187,7 +195,6 @@ class App < Roda
         r.is {
           r.on(":block_hash") { |block_hash|
             r.get {
-              block_count = BLOCKS_COUNT.()
               view "blocks", locals: {
                 block_count: block_count,
                 hash:        block_hash,
@@ -233,8 +240,8 @@ class App < Roda
     view "not_found"
   end
 
-
   error do |err|
+
     # self.request.status_code = 500
     puts "Error (catched by error_handler):"
     puts err.backtrace

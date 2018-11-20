@@ -21,7 +21,6 @@ ADD .bundle/config-docker .bundle/config
 ADD Gemfile*  /app/
 RUN bundle --deployment
 
-ENV RACK_ENV production
 
 RUN ls vendor
 
@@ -29,6 +28,8 @@ ADD .   /app
 
 FROM ruby
 COPY --from=builder /app /app
+
+ENV RACK_ENV production
 
 WORKDIR /app
 
