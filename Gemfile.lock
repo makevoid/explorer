@@ -81,7 +81,6 @@ PLATFORMS
 
 DEPENDENCIES
   bitcoin-client!
-  coffee-script
   guard
   guard-coffeescript
   haml

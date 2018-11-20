@@ -1,4 +1,16 @@
-FROM makevoid/ruby-coffee as builder
+FROM ubuntu:cosmic as ruby
+
+RUN apt update -y
+RUN apt install -y ruby-dev git
+RUN gem i bundler
+
+
+FROM ruby as ruby-build
+
+RUN apt install -y build-essential
+
+
+FROM ruby-build as builder
 
 WORKDIR /app
 
@@ -15,12 +27,9 @@ RUN ls vendor
 
 ADD .   /app
 
-# FROM makevoid/ruby-2.5 # TODO: compile coffee in the build step
-FROM makevoid/ruby-coffee
+FROM ruby
 COPY --from=builder /app /app
 
 WORKDIR /app
-
-RUN bundle --deployment
 
 CMD bundle exec rackup -o 0.0.0.0 -p 3000
