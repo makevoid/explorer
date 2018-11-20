@@ -1,7 +1,7 @@
-require 'bundler/setup'
-Bundler.require :default
-
 APP_ENV = ENV["RACK_ENV"] || "development"
+
+require 'bundler/setup'
+Bundler.require :default, APP_ENV.to_sym
 
 path = File.expand_path "../../", __FILE__
 APP_PATH = path
