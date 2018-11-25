@@ -20,6 +20,9 @@
     -# FIXME
     -#
 
+
+    -#  TODO: move templates both in a partial and in just blocks.haml
+
     %script.tx_template{ type: "text/x-handlebars-template" }
       :plain
         <h4>Block info:</h4>
@@ -30,6 +33,25 @@
         {{#each tx}}
           <div class='tx'><a href='/txs/{{this}}'>{{this}}</a></div>
         {{/each}}
-        
+
+    %script.block_cursor_template{ type: "text/x-handlebars-template" }
+      :plain
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="block block_prev" data-url="/blocks/{{ block_prev }}" data-block-count={{ block_prev }}>
+          <span class="text">←</span>
+        </div>
+        <div class="line"></div>
+        <div class="block block_curr" data-url="/blocks/{{ block_curr }}" data-block-count={ block_curr }>
+          {{ block_curr }}
+        </div>
+        <div class="line"></div>
+        <div class="block block_next" data-url="/blocks/{{ block_next }}" data-block-count={{ block_next }}>
+          <span class="text">→</span>
+        </div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line_dot"></div>
+
     = assets :js
     = content_for :js

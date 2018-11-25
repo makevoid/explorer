@@ -5,47 +5,52 @@
       window.block_curr = #{defined?(block_curr) ? block_curr : "null"}
 
   :ruby
-    max_blocks = 4
+    max_blocks = 5
     back_max_blocks = block_curr + max_blocks < block_count
 
-  .abso
-    .line
-    .line.short
-    - if back_max_blocks
-      .block.block_prev{ data: { block_count: block_curr-1 } } < prev
-      .line
-      .block.block_curr{ data: { block_count: block_curr } }= block_curr
-      .line
-      .block.block_next{ data: { block_count: block_curr+1 } } next >
-      .line
-      .line_dot
-    - else
-      .block.block_btn{ data: { block_count: block_count-4 } }= block_count-4
-      .line
-      .block.block_btn{ data: { block_count: block_count-3 } }= block_count-3
-      .line
-      .block.block_btn{ data: { block_count: block_count-2 } }= block_count-2
-      .line
-      .block.block_btn{ data: { block_count: block_count-1 } }= block_count-1
-      .line
-      .block.block_btn{ data: { block_count: block_count   }  }= block_count
-      .line_dot
-      .block_dot
-  .spacer_viz
+  %section
+    .container_abso.abso
+      - unless back_max_blocks
+        %a.prev_arrow.abso{ href: js_void } ←
+      .line.short
+      - if back_max_blocks
+        .block_cursor
+          .line
+          .line
+          .block.block_prev{ data: { block_count: block_curr-1 } }
+            %span.text ←
+          .line
+          .block.block_curr{ data: { block_count: block_curr } }= block_curr
+          .line
+          .block.block_next{ data: { block_count: block_curr+1 } }
+            %span.text →
+          .line
+          .line_dot
+      - else
+        - oldest_block_num = block_count-max_blocks+1
+        .block_timeline
+          - oldest_block_num.upto(block_count) do |count|
+            %div{ class: "#{"hide_on_mobile" if count < oldest_block_num+1}" }
+              .line
+              .block.block_btn{ data: { block_count: count } }= count
+          .line_dot
+          .block.block_dot
+        .block_cursor_view
+    .spacer_viz
 
-  %h3
-    %span Block:
-    %span.block_number
-      = block_count
-    %span -
-    %span.hash
-      #{hash.sub /^0+/, ''}
+    %h3
+      %span Block:
+      %span.block_number
+        = block_curr
+      %span -
+      %span.hash
+        #{hash.sub /^0+/, ''}
 
-  -# TODO: add moment.js for the time.ago
+    -# TODO: add moment.js for the time.ago
 
-  .transactions
+    .transactions
 
-  %a.load_more.btn{ href: js_void, class: "hidden" } Load more...
+    %a.load_more.btn{ href: js_void, class: "hidden" } Load more...
 
-  - if APP_ENV == "development"
-    %p page rendering time: #{((Time.now - @time) * 1000).to_i}ms
+    - if APP_ENV == "development"
+      %p page rendering time: #{((Time.now - @time) * 1000).to_i}ms
