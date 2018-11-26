@@ -16,7 +16,7 @@ BCHSV = '91.121.181.140'
 BTC   = '176.31.116.188'
 BTC_LOCAL  = 'localhost'
 
-DEFAULT_HOST = if "production"
+DEFAULT_HOST = if APP_ENV == "production"
   BCHSV
 else
   BTC_LOCAL
@@ -25,6 +25,13 @@ end
 RPC_HOST = ENV["BTC_RPC_HOST"] || DEFAULT_HOST
 
 RPC_PORT = 8332
+
+# note: I'll be releasing a btc core explorer
+CHAIN_NAME = if APP_ENV == "production"
+  "Bitcoin SV"
+else
+  "Bitcoin"
+end
 
 password = if DOCKER
   ENV["BITCOIN_RPCPASS"]
