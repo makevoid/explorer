@@ -91,8 +91,7 @@ class App < Roda
       end
     }
 
-    THREE_MINS = 360 unless defined?(THREE_MINS) # 3 minutes
-    BLOCKS_COUNT = -> { cache.("cache:blocks_count", -> { CORE.blocks_count }, THREE_MINS).to_i } unless defined?(BLOCKS_COUNT)
+    BLOCKS_COUNT = -> { cache.("cache:blocks_count", -> { CORE.blocks_count }, 30).to_i } unless defined?(BLOCKS_COUNT)
 
     r.on("api") {
       json_route
