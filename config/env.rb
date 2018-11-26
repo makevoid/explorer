@@ -11,11 +11,18 @@ APP_PATH = path
 
 DOCKER = ENV["DOCKER"] == "1"
 
+# hosts
 BCHSV = '91.121.181.140'
 BTC   = '176.31.116.188'
 BTC_LOCAL  = 'localhost'
 
-RPC_HOST = ENV["BTC_RPC_HOST"] || BTC_LOCAL
+DEFAULT_HOST = if "production"
+  BCHSV
+else
+  BTC_LOCAL
+end
+
+RPC_HOST = ENV["BTC_RPC_HOST"] || DEFAULT_HOST
 
 RPC_PORT = 8332
 

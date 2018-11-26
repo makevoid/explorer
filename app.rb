@@ -26,7 +26,7 @@ class App < Roda
   plugin :caching
 
   use Rack::Deflater
-  use Raven::Rack
+  use Raven::Rack if APP_ENV == "production"
 
   # TODO: move in helpers
 
