@@ -26,6 +26,7 @@ class App < Roda
   plugin :caching
 
   use Rack::Deflater
+  use Raven::Rack
 
   # TODO: move in helpers
 
