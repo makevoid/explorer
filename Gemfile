@@ -20,3 +20,7 @@ group :development do
   gem "guard-coffeescript"
   gem "oj"
 end
+
+group :production do
+  gem "sentry-raven"
+end

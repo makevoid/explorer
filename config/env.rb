@@ -11,10 +11,11 @@ APP_PATH = path
 
 DOCKER = ENV["DOCKER"] == "1"
 
-BCHSV1 = '91.121.181.140'
-BCHSV2 = '176.31.116.188'
+BCHSV = '91.121.181.140'
+BTC   = '176.31.116.188'
+BTC_LOCAL  = 'localhost'
 
-RPC_HOST = ENV["BTC_RPC_HOST"] || BCHSV1
+RPC_HOST = ENV["BTC_RPC_HOST"] || BTC_LOCAL
 
 RPC_PORT = 8332
 
@@ -49,3 +50,10 @@ else
 end
 
 R = REDIS # alias
+
+# monitoring (sentry)
+if APP_ENV == "production"
+  Raven.configure do |config|
+    config.dsn = "https://727c1c8f6cba461d897edc9643365481:#{ENV["SENTRY_SECRET"]}@sentry.io/1330847"
+  end
+end
