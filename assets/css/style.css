@@ -138,10 +138,10 @@ input {
 .block {
   background: #236fb2;
   border: 3px solid #236fb2;
+  color: white;
   cursor: pointer;
   text-align: center;
   line-height: 60px;
-  color: white;
 }
 
 .block:hover {
@@ -158,8 +158,10 @@ input {
   position: relative;
   top: 30px;
 }
+
 .block_dot {
   border: 3px dashed #236fb2;
+  background: none;
 }
 
 .line_dot {
@@ -228,5 +230,77 @@ input {
 }
 
 .bold, .b, span.b {
+  font-weight: bold;
+}
+
+.abso {
+  width: 3000px;
+}
+
+.block.block_prev, .block.block_next {
+  font-size: 3em;
+}
+
+.block.block_prev .text, .block.block_next .text {
+  position: relative;
+  top: -9px;
+}
+
+.block_cursor .block_curr:hover {
+  background: #236fb2;
+  color: white;
+}
+
+@media only screen and (max-width: 750px) {
+  .line {
+    display: none;
+  }
+
+  .abso {
+    width: 100%;
+  }
+
+  .page.blocks > section {
+    margin-top: -10px;
+  }
+
+  .page.blocks > section .abso {
+    margin-top: -170px;
+  }
+
+  .abso {
+    left: 3%;
+  }
+
+  .blocks .block {
+    padding: 4%;
+    display: block;
+    margin: 3% 4%;
+  }
+
+  .spacer_viz {
+    margin-top: 170px;
+  }
+
+  .line_dot {
+    display: none;
+  }
+
+ .block_dot {
+ }
+
+}
+
+@media only screen and (min-width: 750px) {
+  .hide_on_mobile {
+    display: none;
+  }
+}
+
+.prev_arrow {
+  width: 30px;
+  margin-top: -10px;
+  margin-left: 10px;
+  font-size: 2em;
   font-weight: bold;
 }

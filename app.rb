@@ -98,7 +98,14 @@ class App < Roda
 
       r.is('blocks', Integer) { |block_id|
         r.get {
-          hash  = CORE.block_hash block_id
+          begin
+            hash = CORE.block_hash block_id
+          rescue BitcoinClient::Errors::RPCError => e
+            error_msg = e.message.match /"message"=>"(?<message>.+)"/
+            error_msg = error_msg[:message] if error_msg
+            # TODO: if =~ /block height ouf of range/i --- enhance the error
+            r.halt(404, { error: error_msg }.to_json)
+          end
           r.etag hash, weak: true
           block = CORE.block hash
           { block: block }.to_json
@@ -107,7 +114,6 @@ class App < Roda
 
       r.is('blocks_latest_num') {
         r.get {
-          CORE = keychain.dev
           block_count = BLOCKS_COUNT.()
           { block_num: block_count }.to_json
         }
@@ -126,7 +132,11 @@ class App < Roda
       r.is {
         r.get {
           block_count = BLOCKS_COUNT.()
-          hash = CORE.block_hash block_id
+          begin
+            hash = CORE.block_hash block_id
+          rescue BitcoinClient::Errors::RPCError => e
+            r.halt 404, :block_not_found
+          end
           view "blocks", locals: {
             block_count: block_count,
             block_curr:  block_id,
@@ -171,8 +181,8 @@ class App < Roda
 
     r.is('txs', String) { |tx_id|
       r.get {
-        @tx_id = tx_id
-        view "tx"
+        tx = CORE.get_transaction tx_id
+        view "tx", locals: { tx: tx, tx_id: tx_id }
       }
     }
 

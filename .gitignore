@@ -1,3 +1,4 @@
 dump.rdb
 *.secret
 vendor
+.env.local

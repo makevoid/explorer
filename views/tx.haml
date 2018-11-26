@@ -1,9 +1,7 @@
-
 %h2
   Transaction:
-  %span= @tx_id
+  %span= tx_id
 
-- tx = keychain.get_transaction @tx_id
 - tx = Hashie::Mash.new tx
 
 %p
@@ -15,7 +13,7 @@
 %h3 Inputs
 .s5
 
-- tx.vin.each do |input|
+- (tx.vin || []).each do |input|
   - if input.txid
     %p
       TX ID:
@@ -32,7 +30,7 @@
 %h3 Outputs
 .s5
 
-- tx.vout.each do |output|
+- (tx.vout || []).each do |output|
   - script = output.scriptPubKey
 
   %p
