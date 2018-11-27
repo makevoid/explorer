@@ -10,10 +10,8 @@ class App < Roda
       vendor/three.js
       vendor/three.flycontrols.js
       vendor/three.orbitcontrols.js
-      vendor/three.domevent.js
-      vendor/three.dynamictexture.js
-      vendor/three.orbitcontrols.js
-      vendor/three.orbitcontrols.js
+      vendor/threex.domevent.js
+      vendor/threex.dynamictexture.js
       vendor/qrcode.js
     )
   end
@@ -27,7 +25,7 @@ class App < Roda
       vendor/handlebars.js
       vendor/moment.js
       blocks.js
-    ).merge(DEV_ASSETS),
+    ) + DEV_ASSETS,
   )
 
   plugin :render, engine: "haml"

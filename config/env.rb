@@ -19,7 +19,7 @@ BTC_LOCAL  = 'localhost'
 DEFAULT_HOST = if APP_ENV == "production"
   BCHSV
 else
-  BTC_LOCAL
+  BTC
 end
 
 RPC_HOST = ENV["BTC_RPC_HOST"] || DEFAULT_HOST
