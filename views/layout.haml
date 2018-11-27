@@ -22,8 +22,7 @@
 
 
     -#  TODO: move templates both in a partial and in just blocks.haml
-
-    %script.tx_template{ type: "text/x-handlebars-template" }
+    %script.block_template{ type: "text/x-handlebars-template" }
       :plain
         <h4>Block info:</h4>
         <p>Time: {{time}}</p>
@@ -33,6 +32,11 @@
         {{#each tx}}
           <div class='tx'><a href='/txs/{{this}}'>{{this}}</a></div>
         {{/each}}
+
+    %script.block_not_found_template{ type: "text/x-handlebars-template" }
+      :plain
+        <h4>Block Not found</h4>
+
 
     %script.block_cursor_template{ type: "text/x-handlebars-template" }
       :plain
