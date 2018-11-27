@@ -9,6 +9,7 @@ class App < Roda
       "vendor/underscore.js",
       "vendor/underscore.string.js",
       "vendor/handlebars.js",
+      "vendor/moment.js",
       "blocks.js",
     ],
   )
