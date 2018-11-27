@@ -209,7 +209,7 @@ input {
 
 /* transactions */
 
-.transactions .tx a  {
+.block_txs .tx a  {
   display: block;
   border-radius: 7px;
   background: #EEE;
@@ -219,12 +219,12 @@ input {
   margin-bottom: 15px;
 }
 
-.transactions .tx a:hover {
+.block_txs .tx a:hover {
   background: #DDD;
   cursor: pointer;
 }
 
-.modal .transactions {
+.modal .block_txs {
   margin: 0 12%;
   margin-top: 50px;
 }
