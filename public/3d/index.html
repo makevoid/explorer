@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta content='width=device-width, initial-scale=1.0' name='viewport'>
+    <title>Bitcoin Block Explorer</title>
+    <!-- base css -->
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <!-- threejs css -->
+    <link rel="stylesheet" href="/this-directory/style.css" />
+</head>
+
+<body class='blocks'>
+    <div class='container'>
+        <h1>
+            <a href='/'>Bitcoin Block Explorer</a>
+        </h1>
+        <div class='s20'></div>
+        <section class='content'>
+            <div class='page blocks'>
+
+                <!-- script/globals -->
+                <script type='text/javascript'>
+                    // TODO: inject from app
+                    window.block_curr = 551662
+                </script>
+
+                <section>
+
+                    <!-- blocks - TODO: do :D -->
+                    <!-- <div class='container_abso abso'>
+                        <a class='prev_arrow abso' href='javascript:void(0)'>←</a>
+                        <div class='line short'></div>
+                        <div class='block_timeline'>
+                            <div class='hide_on_mobile'>
+                                <div class='line'></div>
+                                <div class='block block_btn' data-block-count='551658'>551658</div>
+                            </div>
+                            <div>
+                                <div class='line'></div>
+                                <div class='block block_btn' data-block-count='551659'>551659</div>
+                            </div>
+                            <div>
+                                <div class='line'></div>
+                                <div class='block block_btn' data-block-count='551660'>551660</div>
+                            </div>
+                            <div>
+                                <div class='line'></div>
+                                <div class='block block_btn' data-block-count='551661'>551661</div>
+                            </div>
+                            <div>
+                                <div class='line'></div>
+                                <div class='block block_btn' data-block-count='551662'>551662</div>
+                            </div>
+                            <div class='line_dot'></div>
+                            <div class='block block_dot'></div>
+                        </div>
+                        <div class='block_cursor_view'></div>
+                    </div> -->
+
+
+                    <!-- #TODO: WIRE THIS CANVAS -->
+                    <div class="threejs-canvas">
+                      <canvas width="100%" height="700"></canvas>
+                    </div>
+
+                </section>
+            </div>
+
+        </section>
+    </div>
+    <div class='modal'>
+        <a class='modal-close' href='javascript:void(0)'>X</a>
+        <div class='modal-content'></div>
+    </div>
+
+
+    <!-- script templates-->
+    <script class='block_template' type='text/x-handlebars-template'>
+        <h4>Block info:</h4>
+        <p>Time: {{time}}</p>
+        <p>Confirmations: {{confirmations}}</p>
+        <p>Size: {{size}} bytes</p>
+        <h4>Transactions ({{tx_count}})</h4>
+        {{#each tx}}
+        <div class='tx'><a href='/txs/{{this}}'>{{this}}</a></div>
+        {{/each}}
+    </script>
+
+    <script class='block_cursor_template' type='text/x-handlebars-template'>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="block block_prev" data-url="/blocks/{{ block_prev }}" data-block-count={{ block_prev }}>
+            <span class="text">←</span>
+        </div>
+        <div class="line"></div>
+        <div class="block block_curr" data-url="/blocks/{{ block_curr }}" data-block-count={ block_curr }>
+            {{ block_curr }}
+        </div>
+        <div class="line"></div>
+        <div class="block block_next" data-url="/blocks/{{ block_next }}" data-block-count={{ block_next }}>
+            <span class="text">→</span>
+        </div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line_dot"></div>
+    </script>
+
+    <!-- partial js -->
+    <script type="text/javascript" src="/assets/js/vendor/zepto.js"></script>
+    <script type="text/javascript" src="/assets/js/vendor/underscore.js"></script>
+    <script type="text/javascript" src="/assets/js/vendor/underscore.string.js"></script>
+    <script type="text/javascript" src="/assets/js/vendor/handlebars.js"></script>
+    <script type="text/javascript" src="/assets/js/blocks.js"></script>
+
+</body>
+
+</html>
