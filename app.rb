@@ -147,19 +147,17 @@ class App < Roda
     }
 
     r.is('blocks', Integer) { |block_id|
-      r.is {
-        r.get {
-          block_count = BLOCKS_COUNT.()
-          begin
-            hash = CORE.block_hash block_id
-          rescue BitcoinClient::Errors::RPCError => e
-            r.halt 404, :block_not_found
-          end
-          view "blocks", locals: {
-            block_count: block_count,
-            block_curr:  block_id,
-            hash:        hash,
-          }
+      r.get {
+        block_count = BLOCKS_COUNT.()
+        begin
+          hash = CORE.block_hash block_id
+        rescue BitcoinClient::Errors::RPCError => e
+          r.halt 404, :block_not_found
+        end
+        view "blocks", locals: {
+          block_count: block_count,
+          block_curr:  block_id,
+          hash:        hash,
         }
       }
     }
@@ -223,6 +221,25 @@ class App < Roda
       }
 
     }
+
+    if APP_ENV == "development"
+      r.on("blocks_new") {
+        r.get {
+          begin
+            block_count = BLOCKS_COUNT.()
+          rescue Errno::ECONNREFUSED => e
+            r.halt :error
+          end
+
+          hash = CORE.block_hash block_count
+          view "blocks_new", locals: {
+            block_count: block_count,
+            block_curr:  block_count,
+            hash:        hash,
+          }
+        }
+      }
+    end
 
     r.assets
   end
