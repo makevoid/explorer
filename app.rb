@@ -2,16 +2,32 @@ require 'tilt/haml'
 require_relative 'config/env'
 
 class App < Roda
+
+  DEV_ASSETS = if APP_ENV == "production"
+    []
+  else
+    %w(
+      vendor/three.js
+      vendor/three.flycontrols.js
+      vendor/three.orbitcontrols.js
+      vendor/three.domevent.js
+      vendor/three.dynamictexture.js
+      vendor/three.orbitcontrols.js
+      vendor/three.orbitcontrols.js
+      vendor/qrcode.js
+    )
+  end
+
   plugin(:assets,
     css: ["style.css"],
-    js:  [
-      "vendor/zepto.js",
-      "vendor/underscore.js",
-      "vendor/underscore.string.js",
-      "vendor/handlebars.js",
-      "vendor/moment.js",
-      "blocks.js",
-    ],
+    js:  %w(
+      vendor/jquery.js
+      vendor/underscore.js
+      vendor/underscore.string.js
+      vendor/handlebars.js
+      vendor/moment.js
+      blocks.js
+    ).merge(DEV_ASSETS),
   )
 
   plugin :render, engine: "haml"
