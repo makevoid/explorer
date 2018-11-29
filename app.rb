@@ -45,6 +45,24 @@ class App < Roda
 
   # TODO: move in helpers
 
+  # view helpers
+
+  def identicon(content, klass: "", size: nil)
+    bg  = [255, 255, 255]
+    icon_size = 24
+    icon_size = size if size
+    img = Identicon.data_url_for content, icon_size, bg
+    haml_tag :img, src: img, class: "identicon #{klass}"
+  end
+
+  def qrcode(content, size)
+    # for addresses this size is fine
+    size = string.size < 40 ? 4 : 7
+    qr = RQRCode::QRCode.new(string, size: size, level: :h )
+    png = qr.to_img  # returns an instance of ChunkyPNG
+    png.resize 370, 370
+  end
+
   def json_route
     response['Content-Type'] = 'application/json'
   end
@@ -150,6 +168,7 @@ class App < Roda
         begin
           hash = CORE.block_hash block_id
         rescue BitcoinClient::Errors::RPCError => e
+          puts e.message
           r.halt 404, :block_not_found
         end
         view "blocks", locals: {

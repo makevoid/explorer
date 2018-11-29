@@ -11,6 +11,10 @@ gem "bitcoin-client", github: "makevoid/bitcoin-client"
 
 gem 'hashie', require: "hashie/mash"
 
+gem 'identicon'
+
+gem 'rqrcode', '~> 0.10.1'
+
 group :development, :production do
   gem "puma"
 end
