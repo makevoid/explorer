@@ -73,7 +73,7 @@ class App < Roda
   end
 
   def qrcode(content, size: 50, klass: nil)
-    raise "Unsuitable for this application - lenght > 50 chars" if content.size > 50
+    raise "Unsuitable for this application - lenght > 80 chars" if content.size > 80
     haml_concat qrcode_html content, size
   end
 

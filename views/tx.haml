@@ -41,8 +41,10 @@
         - identicon(address, klass: "", size: nil)
         %span.b
           #{address}
-        %span.qrcode
-          - qrcode(address, klass: "", size: nil)
+        -# inline SVG qr codes are too slow like this
+        -#
+        -# %span.qrcode
+        -#   - qrcode(address, klass: "", size: nil)
 
   -# # support multiple addresses
   -#
