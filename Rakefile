@@ -19,7 +19,7 @@ require_relative 'config/rancher_auth_lib'
 include RancherAuthLib
 
 RNCH_PROJECT = "1a5"
-RNCH_SERVICE = "1s89"
+RNCH_SERVICE = "1s93"
 
 desc 'Deploy task, build container, push to dockerhub, trigger rancher upgrade'
 task :deploy do
