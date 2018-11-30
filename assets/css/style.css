@@ -304,3 +304,35 @@ input {
   font-size: 2em;
   font-weight: bold;
 }
+
+.identicon {
+  border: 2px solid #CCC;
+  position: relative;
+  top: 10px;
+}
+
+.qrcode {
+  border: 2px solid #CCC;
+  width: 50px;
+  background: white;
+  display: inline-block;
+  padding: 8px 8px 6px 8px;
+  position: relative;
+  top: 16px;
+}
+
+.qrcode svg {
+  width: 50px;
+  height: 50px;
+}
+
+/* qcode zoom animation */
+
+.qrcode {
+  cursor: pointer;
+  transition: transform .2s;
+}
+
+.qrcode:hover {
+  transform: scale(2);
+}

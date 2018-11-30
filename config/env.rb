@@ -20,6 +20,7 @@ DEFAULT_HOST = if APP_ENV == "production"
   BCHSV
 else
   BTC
+  BTC_LOCAL
 end
 
 RPC_HOST = ENV["BTC_RPC_HOST"] || DEFAULT_HOST
@@ -32,6 +33,14 @@ CHAIN_NAME = if APP_ENV == "production"
 else
   "Bitcoin"
 end
+
+BTC_SYMBOL = if APP_ENV == "production"
+  "BCH (SV)"
+else
+  "BTC"
+end
+
+BTC_SYM = BTC_SYMBOL
 
 password = if DOCKER
   ENV["BITCOIN_RPCPASS"]

@@ -13,13 +13,14 @@ gem 'hashie', require: "hashie/mash"
 
 gem 'identicon'
 
-gem 'rqrcode', '~> 0.10.1'
+gem 'rqrcode', github: "makevoid/rqrcode" # SVG viewbox
 
 group :development, :production do
   gem "puma"
 end
 
 group :development do
+  gem "rerun"
   gem "guard"
   gem "guard-coffeescript"
   gem "oj"

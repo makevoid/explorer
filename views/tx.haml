@@ -32,14 +32,17 @@
 
 - (tx.vout || []).each do |output|
   - script = output.scriptPubKey
-
-  %p
-    %span.b
-      #{'%.8f' % output.value} BCH (SV)
-    - if script.addresses && address = script.addresses.first
-      to #{address}
-
-      > TODO: add IDENTICON + QRCODE
+  - if output.value > 0
+    %p
+      %span.b
+        #{'%.8f' % output.value} #{BTC_SYM}
+      - if script.addresses && address = script.addresses.first
+        to
+        - identicon(address, klass: "", size: nil)
+        %span.b
+          #{address}
+        %span.qrcode
+          - qrcode(address, klass: "", size: nil)
 
   -# # support multiple addresses
   -#

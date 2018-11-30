@@ -5,6 +5,12 @@ end
 
 task default: :run
 
+desc "Run the app (rerun)"
+task :run_dev do
+  sh "rerun -s KILL -p \"**/*.{rb}\" -- bundle exec rackup -p 3000"
+end
+
+
 # ----
 # rancher deployment
 

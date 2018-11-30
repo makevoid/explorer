@@ -49,18 +49,32 @@ class App < Roda
 
   def identicon(content, klass: "", size: nil)
     bg  = [255, 255, 255]
-    icon_size = 24
+    icon_size = 30
     icon_size = size if size
     img = Identicon.data_url_for content, icon_size, bg
     haml_tag :img, src: img, class: "identicon #{klass}"
   end
 
-  def qrcode(content, size)
+  def qrcode_html(content, size=50)
     # for addresses this size is fine
-    size = string.size < 40 ? 4 : 7
-    qr = RQRCode::QRCode.new(string, size: size, level: :h )
-    png = qr.to_img  # returns an instance of ChunkyPNG
-    png.resize 370, 370
+    size = content.size < 40 ? 4 : 7
+    qr = RQRCode::QRCode.new(content,
+      size: size,
+      level: :h,
+      # resize_gte_to: false,
+      # resize_exactly_to: false,
+      fill: 'white',
+      # color: 'black',
+      # border_modules: 4,
+      # module_px_size: 6,
+      file: nil # path to write
+    )
+    qr.as_svg
+  end
+
+  def qrcode(content, size: 50, klass: nil)
+    raise "Unsuitable for this application - lenght > 50 chars" if content.size > 50
+    haml_concat qrcode_html content, size
   end
 
   def json_route
@@ -107,7 +121,6 @@ class App < Roda
   route do |r|
     @time = Time.now
 
-    r.public if APP_ENV == "development"
 
     r.root {
       r.redirect "/blocks"
@@ -125,7 +138,11 @@ class App < Roda
       end
     }
 
-    BLOCKS_COUNT = -> { cache.("cache:blocks_count", -> { CORE.blocks_count }, 30).to_i } unless defined?(BLOCKS_COUNT)
+    # uncached version
+    BLOCKS_COUNT = -> { CORE.blocks_count } unless defined?(BLOCKS_COUNT)
+
+    # cached version
+    # BLOCKS_COUNT = -> { cache.("cache:blocks_count", -> { CORE.blocks_count }, 30).to_i } unless defined?(BLOCKS_COUNT)
 
     r.on("api") {
       json_route
@@ -179,11 +196,39 @@ class App < Roda
       }
     }
 
+    # TODO: MOVE (cli debug)
+    def getnetworkinfo
+      bitcoin_cli = "bitcoin-cli"
+      bitcoin_cli = "/usr/local/bin/bitcoin-cli" if ENV["UBUNTU"] == "1"
+      `#{bitcoin_cli} getnetworkinfo`
+    end
+
+    # TODO: move! (rpc debug / detection / main service check)
+
+    def debug_getnetworkinfo
+      in_dev_env = APP_ENV == "development" && `whoami`.strip == "makevoid"
+      puts "getnetworkinfo:"
+      puts getnetworkinfo
+      puts '---'
+      puts "~/.bitcoin-rpcpassword"
+      puts File.read(File.expand_path "~/.bitcoin-rpcpassword") if in_dev_env # (safer so that nobody else but me runs this by mistake :D)
+      puts '---'
+      puts "ENV['BITCOIN_RPCPASS']"
+      puts ENV['BITCOIN_RPCPASS'] if in_dev_env
+    rescue Exception => e
+      puts "TODO: RESCUE"
+      raise e
+    end
+
+    alias :debug_connection_issues :debug_getnetworkinfo
+
     r.on("blocks") {
 
       begin
         block_count = BLOCKS_COUNT.()
       rescue Errno::ECONNREFUSED => e
+        debug_connection_issues
+        puts "Error: `CORE.blocks_count` failed"
         r.halt :error
       end
 
@@ -257,6 +302,10 @@ class App < Roda
         }
       }
     end
+
+    # TODO: use nginx for assets - phusion container !!!
+
+    r.public # if APP_ENV == "development"
 
     r.assets
   end
