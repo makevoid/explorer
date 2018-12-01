@@ -3,15 +3,42 @@ APP_ENV = ENV["RACK_ENV"] || "development"
 require 'bundler/setup'
 Bundler.require :default, APP_ENV.to_sym
 
+# encoding settings, independent from the current system lang
 Encoding.default_internal = Encoding::UTF_8
 Encoding.default_external = Encoding::UTF_8
 
+# chain (current_chain) env variable defaults and definitions (btc and forks)
+MAINNET = "MAINNET_CHAIN" # aka (the Blockchain - the one with the most cumulative pow at the moment)
+MAINNET_CHAIN = "MAINNET_CHAIN"
+BTC_CHAIN = MAINNET # BCH_CHAIN (fork)
+BCH_ABC_CHAIN = "BCH_ABC_CHAIN" # BCH_CHAIN (fork)
+BCH_SV_CHAIN  = "BCH_SV_CHAIN"  # BCH_CHAIN (fork)
+
+# configuration
+
+CURRENT_CHAIN = BCH_CHAIN
+
+
+# --------
+
+# application path (PATH env var)
 path = File.expand_path "../../", __FILE__
 APP_PATH = path
 
+# docker is enabled
 DOCKER = ENV["DOCKER"] == "1"
 
+# --------
+
 # hosts
+# ---
+#
+# default hosts:
+#
+#   hosts that accept RPC connections with the bitcoin core (bitcoind) JSON API
+#   (they obviously don't offer a wallet API, means only that bitcoind is configured with `./configure --disable-wallet`)
+#
+
 BCHSV = '91.121.181.140'
 BTC   = '176.31.116.188'
 BTC_LOCAL  = 'localhost'
