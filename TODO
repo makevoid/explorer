@@ -1,0 +1,3 @@
+TODO _ REFACTOR CONFIGS
+
+(yes configs should be refactored in 1+n config files, one for dev (common), one for base prod and called something like "PROD_BASE" and then all these: prod_btc, prod_bch_sv, prod_btc_sv, prod_lite, prod_doge, etc.... (they extend from prod_base") can be implemented easily) TODO

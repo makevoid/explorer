@@ -90,6 +90,9 @@ RPC_PASSWORD = password.strip
 # models
 require_relative "../models/core"
 
+
+# Redis
+
 REDIS_HOST = !DOCKER ? "localhost" : "redis"
 REDIS_PORT = 6379
 
@@ -100,6 +103,7 @@ else
 end
 
 R = REDIS # alias
+
 
 # monitoring (sentry)
 if APP_ENV == "production"
