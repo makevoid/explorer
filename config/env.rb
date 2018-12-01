@@ -8,15 +8,20 @@ Encoding.default_internal = Encoding::UTF_8
 Encoding.default_external = Encoding::UTF_8
 
 # chain (current_chain) env variable defaults and definitions (btc and forks)
-MAINNET = "MAINNET_CHAIN" # aka (the Blockchain - the one with the most cumulative pow at the moment)
-MAINNET_CHAIN = "MAINNET_CHAIN"
-BTC_CHAIN = MAINNET # BCH_CHAIN (fork)
+# "MAIN_CHAIN" # aka MAIN-NET (aka - the Blockchain - the one with the most cumulative pow at the moment)
+MAIN_CHAIN = "MAIN_CHAIN"
+BTC_CHAIN = MAIN_CHAIN # BCH_CHAIN (fork)
+
+# forks
 BCH_ABC_CHAIN = "BCH_ABC_CHAIN" # BCH_CHAIN (fork)
 BCH_SV_CHAIN  = "BCH_SV_CHAIN"  # BCH_CHAIN (fork)
+# BCH_CHAIN     = BCH_ABC_CHAIN ?
+BCH_SV_CHAIN  = "BCH_SV_CHAIN"  # BCH_CHAIN (fork)
 
-# configuration
 
-CURRENT_CHAIN = BCH_CHAIN
+# main chain configuration
+
+CURRENT_CHAIN = MAIN_CHAIN
 
 
 # --------
@@ -55,16 +60,20 @@ RPC_HOST = ENV["BTC_RPC_HOST"] || DEFAULT_HOST
 RPC_PORT = 8332
 
 # note: I'll be releasing a btc core explorer
-CHAIN_NAME = if APP_ENV == "production"
-  "Bitcoin SV"
+CHAIN_NAME = case CURRENT_CHAIN
+  when MAIN_CHAIN     then "Bitcoin"
+  when BCH_ABC_CHAIN  then "Bitcoin ABC"
+  when BCH_SV_CHAIN   then "Bitcoin SV"
 else
   "Bitcoin"
 end
 
-BTC_SYMBOL = if APP_ENV == "production"
-  "BCH (SV)"
+BTC_SYMBOL = case CURRENT_CHAIN
+  when MAIN_CHAIN     then "BTC"
+  when BCH_ABC_CHAIN  then "BCH ABC"
+  when BCH_SV_CHAIN   then "BCH SV"
 else
-  "BTC"
+  "Bitcoin"
 end
 
 BTC_SYM = BTC_SYMBOL
@@ -72,7 +81,7 @@ BTC_SYM = BTC_SYMBOL
 password = if DOCKER
   ENV["BITCOIN_RPCPASS"]
 else
-  # "hack" to load file locally from bitcoin.conf
+  # "hack" to load file locally from bitcoin.conf ( ususally the dev machine is a machine with bitcoin-qt installed and synced - w/ pruning enable if necessary e.g. when dev machines are laptops )
   read = -> (path) { File.read File.expand_path path }
   path = "~/.bitcoin/bitcoin.conf"
   file = read.( path )
@@ -90,7 +99,6 @@ RPC_PASSWORD = password.strip
 # models
 require_relative "../models/core"
 
-
 # Redis
 
 REDIS_HOST = !DOCKER ? "localhost" : "redis"
@@ -102,10 +110,10 @@ else
   Redis.new host: REDIS_HOST, port: REDIS_PORT
 end
 
-R = REDIS # alias
+R = REDIS # alias so we can R["key"] (hash-like DSL, use redis as a remote constant #remotememory)
 
+# Monitoring (sentry, hooks into rack)
 
-# monitoring (sentry)
 if APP_ENV == "production"
   Raven.configure do |config|
     config.dsn = "https://727c1c8f6cba461d897edc9643365481:#{ENV["SENTRY_SECRET"]}@sentry.io/1330847"
