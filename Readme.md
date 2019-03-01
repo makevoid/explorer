@@ -1,8 +1,18 @@
-# Blockchain Explorer (BTC, BCH, BCH-SV, LTC, DOGE etc. compatible)
+# Blockchain Explorer 
 
-Based off Bitcoin Core JSON RPC API.
+### (BTC, BCH, BCH-SV, LTC, DOGE etc. compatible)
 
-Uses bitcoin's JSON RPC API, you need `bitcoind` / `bitcoin-qt` running in the background.
+
+Based off the Bitcoin Core JSON RPC API.
+
+It uses bitcoin's default JSON RPC API, meaning that you need `bitcoind` / `bitcoin-qt` running in background with `txindex=1` enabled, the explorer will use the data directly from the index, no extra index is added.
+
+
+### Prerequisites
+
+- redis
+- bitcoin-core (btc, bch, ltc, doge, etc...)
+
 
 # API
 
