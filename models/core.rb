@@ -33,6 +33,7 @@ class Core
     @client.sendtoaddress to, amount
   end
 
+  # TODO: remove - this is only for imported addresses
   def transactions
     txs = @client.listtransactions.reverse
     txs.map do |tx|
