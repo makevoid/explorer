@@ -15,18 +15,13 @@ MAIN_CHAIN = "MAIN_CHAIN"
 BTC_CHAIN = MAIN_CHAIN # BCH_CHAIN (fork)
 
 # forks
-BCH_ABC_CHAIN = "BCH_ABC_CHAIN" # BCH_CHAIN (fork)
-BCH_SV_CHAIN  = "BCH_SV_CHAIN"  # BCH_CHAIN (fork)
-# BCH_CHAIN     = BCH_ABC_CHAIN ?
-BCH_SV_CHAIN  = "BCH_SV_CHAIN"  # BCH_CHAIN (fork)
-
+BCH_CHAIN = "BCH_CHAIN" # BCH_CHAIN (fork)
+BSV_CHAIN  = "BSV_CHAIN"  # BCH_CHAIN (fork)
 
 # main chain configuration
 
 CURRENT_CHAIN = MAIN_CHAIN
 
-
-# --------
 
 # application path (PATH env var)
 path = File.expand_path "../../", __FILE__
@@ -34,8 +29,6 @@ APP_PATH = path
 
 # docker is enabled
 DOCKER = ENV["DOCKER"] == "1"
-
-# --------
 
 # hosts
 # ---
@@ -46,7 +39,10 @@ DOCKER = ENV["DOCKER"] == "1"
 #   (they obviously don't offer a wallet API, means only that bitcoind is configured with `./configure --disable-wallet`)
 #
 
-BCHSV = '91.121.181.140'
+# makevoid's configuration
+
+# hosts
+BCHSV = ''
 BTC   = '54.194.11.86'
 BTC_LOCAL  = 'localhost'
 
@@ -63,17 +59,17 @@ RPC_PORT = 8332
 
 # note: I'll be releasing a btc core explorer
 CHAIN_NAME = case CURRENT_CHAIN
-  when MAIN_CHAIN     then "Bitcoin"
-  when BCH_ABC_CHAIN  then "Bitcoin ABC"
-  when BCH_SV_CHAIN   then "Bitcoin SV"
+  when MAIN_CHAIN then "Bitcoin"
+  when BCH_CHAIN  then "BCH"
+  when BSV_CHAIN  then "BSV"
 else
   "Bitcoin"
 end
 
 BTC_SYMBOL = case CURRENT_CHAIN
-  when MAIN_CHAIN     then "BTC"
-  when BCH_ABC_CHAIN  then "BCH ABC"
-  when BCH_SV_CHAIN   then "BCH SV"
+  when MAIN_CHAIN then "BTC"
+  when BCH_CHAIN  then "BCH ABC"
+  when BSV_CHAIN  then "BCH SV"
 else
   "Bitcoin"
 end

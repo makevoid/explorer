@@ -38,19 +38,19 @@ class Core
     txs.map do |tx|
       tx = symbolize tx
       Transaction.new(
-        account:         tx.fetch(:account),
-        address:         tx.fetch(:address),
-        category:        tx.fetch(:category),
-        amount:          tx.fetch(:amount),
-        vout:            tx.fetch(:vout),
-        confirmations:   tx.fetch(:confirmations),
+        account:         tx.f(:account),
+        address:         tx.f(:address),
+        category:        tx.f(:category),
+        amount:          tx.f(:amount),
+        vout:            tx.f(:vout),
+        confirmations:   tx.f(:confirmations),
         blockhash:       tx[:blockhash],
         blockindex:      tx[:blockindex],
         blocktime:       tx[:blocktime],
-        txid:            tx.fetch(:txid),
-        keychainconflicts: tx.fetch(:keychainconflicts),
-        time:            tx.fetch(:time),
-        timereceived:    tx.fetch(:timereceived),
+        txid:            tx.f(:txid),
+        keychainconflicts: tx.f(:keychainconflicts),
+        time:            tx.f(:time),
+        timereceived:    tx.f(:timereceived),
       )
     end
   end
