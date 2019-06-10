@@ -210,9 +210,9 @@ class App < Roda
       puts "getnetworkinfo:"
       puts getnetworkinfo
       puts '---'
-      puts "~/.bitcoin-rpcpassword"
-      puts File.read(File.expand_path "~/.bitcoin-rpcpassword") if in_dev_env # (safer so that nobody else but me runs this by mistake :D)
-      puts '---'
+      # puts "~/.bitcoin-rpcpassword"
+      # puts File.read(File.expand_path "~/.bitcoin-rpcpassword") if in_dev_env # (safer so that nobody else but me runs this by mistake :D)
+      # puts '---'
       puts "ENV['BITCOIN_RPCPASS']"
       puts ENV['BITCOIN_RPCPASS'] if in_dev_env
     rescue Exception => e

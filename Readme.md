@@ -1,4 +1,4 @@
-# Blockchain Explorer 
+# Blockchain Explorer
 
 ### (BTC, BCH, BCH-SV, LTC, DOGE etc. compatible)
 
@@ -89,7 +89,7 @@ This is a sample `~/.bitcoin/bitcoin.conf` to make sure this `explorer` can conn
 
 ```
 txindex=1
-rpcuser=bitcoin
+rpcuser=bitcoinrpc
 rpcpassword=YOUR_PASSWORD
 rpcallowip=YOUR_IP
 ```

@@ -1,20 +1,12 @@
 version: '2'
 services:
-  explorer:
-    scale: 2
-    start_on_create: true
-  redis:
-    scale: 2
-    start_on_create: true
   explorer-lb:
     scale: 2
     start_on_create: true
     lb_config:
       certs: []
       port_rules:
-      - hostname: ''
-        path: ''
-        priority: 1
+      - priority: 1
         protocol: http
         service: explorer
         source_port: 3101
@@ -26,4 +18,11 @@ services:
       unhealthy_threshold: 3
       initializing_timeout: 60000
       interval: 2000
+      strategy: recreate
       reinitializing_timeout: 60000
+  explorer:
+    scale: 2
+    start_on_create: true
+  redis:
+    scale: 2
+    start_on_create: true

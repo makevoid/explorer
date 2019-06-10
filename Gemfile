@@ -20,6 +20,7 @@ group :development, :production do
 end
 
 group :development do
+  gem "rake"
   gem "rerun"
   gem "guard"
   gem "guard-coffeescript"

@@ -61,7 +61,8 @@ class Core
   end
 
   def blocks_count
-    @client.getblockcount
+    info = @client.getblockchaininfo
+    info.fetch "blocks"
   end
 
   def block_hash(block_number)

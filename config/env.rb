@@ -45,14 +45,14 @@ DOCKER = ENV["DOCKER"] == "1"
 #
 
 BCHSV = '91.121.181.140'
-BTC   = '176.31.116.188'
+BTC   = '54.194.11.86'
 BTC_LOCAL  = 'localhost'
 
 DEFAULT_HOST = if APP_ENV == "production"
   BCHSV
 else
-  BTC
   BTC_LOCAL
+  BTC
 end
 
 RPC_HOST = ENV["BTC_RPC_HOST"] || DEFAULT_HOST
@@ -89,7 +89,7 @@ else
 end
 
 # RPC_USER     = 'bitcoinrpc'
-RPC_USER     = ENV["BTC_RPC_USERNAME"] || 'bitcoin'
+RPC_USER     = ENV["BTC_RPC_USERNAME"] || 'bitcoinrpc'
 RPC_PASSWORD = password.strip
 
 # TODO:
@@ -118,4 +118,8 @@ if APP_ENV == "production"
   Raven.configure do |config|
     config.dsn = "https://727c1c8f6cba461d897edc9643365481:#{ENV["SENTRY_SECRET"]}@sentry.io/1330847"
   end
+end
+
+if APP_ENV == "devlopment"
+  R.flushdb
 end

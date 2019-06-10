@@ -11,6 +11,7 @@ services:
     environment:
       - DOCKER=1
       - BITCOIN_RPCPASS=$BITCOIN_RPCPASS
+      - SENTRY_SECRET=$SENTRY_SECRET
     labels:
       io.rancher.container.pull_image: always
     depends_on:
