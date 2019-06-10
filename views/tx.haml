@@ -2,22 +2,20 @@
   Transaction:
   %span= tx_id
 
-- tx = Hashie::Mash.new tx
-
 %p
   %span Size:
-  = tx["size"]
+  = tx.f "size"
   bytes
 .s10
 
 %h3 Inputs
 .s5
 
-- (tx.vin || []).each do |input|
-  - if input.txid
+- (tx.f("vin") || []).each do |input|
+  - if input["txid"]
     %p
       TX ID:
-      %a{ href: "/txs/#{input.txid}" } #{input.txid}
+      %a{ href: "/txs/#{input.f("txid")}" } #{input.f("txid")}
     -# %p
     -#   output: #{input.vout}
     -# %p
@@ -30,13 +28,15 @@
 %h3 Outputs
 .s5
 
-- (tx.vout || []).each do |output|
-  - script = output.scriptPubKey
-  - if output.value > 0
+- (tx.f("vout") || []).each do |output|
+  - script = output.f "scriptPubKey"
+  - value = output.f("value")
+  - if value > 0
+    - addresses = script.f "addresses"
     %p
       %span.b
-        #{'%.8f' % output.value} #{BTC_SYM}
-      - if script.addresses && address = script.addresses.first
+        #{'%.8f' % value} #{BTC_SYM}
+      - if addresses && address = addresses.first
         to
         - identicon(address, klass: "", size: nil)
         %span.b

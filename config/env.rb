@@ -2,6 +2,8 @@ APP_ENV = ENV["RACK_ENV"] || "development"
 
 require 'bundler/setup'
 Bundler.require :default, APP_ENV.to_sym
+require_relative '../lib/monkeypatches'
+
 
 # encoding settings, independent from the current system lang
 Encoding.default_internal = Encoding::UTF_8

@@ -45,7 +45,6 @@ GEM
     haml (5.1.1)
       temple (>= 0.8.0)
       tilt
-    hashie (3.6.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     identicon (0.0.5)
@@ -103,7 +102,6 @@ DEPENDENCIES
   guard
   guard-coffeescript
   haml
-  hashie
   identicon
   oj
   puma
