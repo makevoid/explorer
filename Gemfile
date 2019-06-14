@@ -9,6 +9,8 @@ gem "redis"
 # gem "bitcoin-client", path: "~/apps/bitcoin-client"
 gem "bitcoin-client", github: "makevoid/bitcoin-client"
 
+gem "bitcoin"
+
 gem 'identicon'
 
 gem 'rqrcode', github: "makevoid/rqrcode" # SVG viewbox
