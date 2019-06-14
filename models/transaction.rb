@@ -1,4 +1,5 @@
 class Transaction
+
   attr_reader :account, :address, :category, :amount, :vout, :confirmations, :blockhash, :blockindex, :blocktime, :txid, :conflicts, :time, :timereceived
 
   def initialize(account:, address:, category:, amount:, vout:, confirmations:, blockhash:, blockindex:, blocktime:, txid:, keychainconflicts:, time:, timereceived:)
@@ -28,4 +29,5 @@ class Transaction
   def amount_s
     "%.6f" % amount
   end
+  
 end

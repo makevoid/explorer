@@ -3,7 +3,7 @@ APP_ENV = ENV["RACK_ENV"] || "development"
 require 'bundler/setup'
 Bundler.require :default, APP_ENV.to_sym
 require_relative '../lib/monkeypatches'
-
+require_relative '../lib/app_helpers'
 
 # encoding settings, independent from the current system lang
 Encoding.default_internal = Encoding::UTF_8
@@ -121,3 +121,7 @@ end
 if APP_ENV == "devlopment"
   R.flushdb
 end
+
+include AppHelpers
+
+require_relative 'const/const_assets'

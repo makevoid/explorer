@@ -2,14 +2,6 @@
 
 %script.txs_template{ type: "text/x-handlebars-template" }
   :plain
-    <style>
-      .status {
-
-      }
-      .wallet {
-
-      }
-    </style>
     <div class='status'>
       Synchronizing:  "X blocks left"
     </div>
@@ -40,7 +32,6 @@
     c = console
 
     # modal - transactions
-
     txs_template = $(".txs_template").html()
     txs_template = Handlebars.compile txs_template
 
@@ -141,12 +132,6 @@
       camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 15000)
       camera.position.z = 1400
 
-      # D = 1
-      # aspect = window.innerWidth / window.innerHeight
-      # camera = new THREE.OrthographicCamera(-D*aspect, D*aspect, D, -D, 1, 1000)
-
-
-
       scene = new (THREE.Scene)
       addLights scene
 
@@ -169,10 +154,8 @@
         blockTexture = blockDynamicTexture()
         # blockTexture = _.extend blockTexture
         blockMaterial = blockPhongMaterial blockTexture.texture
-        -# blockTexture.drawText blockNum, undefined, 256, 'white'
         blockNum = String(blockNum)
         blockNum = "\#{blockNum[0..2]}.\#{blockNum[3..6]}"
-        -# blockNum = "\#{blockNum[0..2]},\#{blockNum[3..6]}"
         blockTexture.drawText blockNum, undefined, 100, 'darkBlue'
 
         block = new THREE.Mesh blockShape, blockMaterial
@@ -184,26 +167,21 @@
         posX = start + space * idx
         block.position.set posX, 0, 0
         domEvent.bind block, 'mouseover', (evt) ->
-          #evt.target.rotation.y = 200
           elem = evt.target
           return if elem.clicked
-          #
           blockTexture = blockDynamicTexture(0.5)
           blockMaterial = blockPhongMaterial blockTexture.texture
           blockTexture.drawText elem.data.num, undefined, 100, 'black'
           elem.material = blockMaterial
-          #
           elem.scale.set(1.2, 1.2, 1.2)
 
         domEvent.bind block, 'mouseout', (evt) ->
           elem = evt.target
           return if elem.clicked
-          #
           blockTexture = blockDynamicTexture()
           blockMaterial = blockPhongMaterial blockTexture.texture
           blockTexture.drawText elem.data.num, undefined, 100, 'darkBlue'
           elem.material = blockMaterial
-          #
           elem.scale.set(1, 1, 1)
 
         # TODO: prevent double click (bug: block remains scaled 1.5)
@@ -218,13 +196,8 @@
           elem.scale.set 1.5, 1.5, 1.5
           loadTransactions(elem.data.num)
           _.delay ->
-            # modal.show()
             modal.get(0).style.display = "block"
-            # modal.get(0).style.opacity = "0.1"
           , 400
-
-        # block.addEventListener 'click', (object3d) ->
-        #   console.log "asd"
 
 
       applyTextureFilters renderer, blockTexture.texture # TODO: check, otherwise apply to all the elements
@@ -235,8 +208,7 @@
       container.appendChild renderer.domElement
 
       controls camera, container
-      # etc...
-      #
+
       window.addEventListener 'resize', onWindowResize, false
 
 
@@ -248,14 +220,12 @@
 
     animate = ->
       requestAnimationFrame animate
-      -# mesh.rotation.x += 0.03
       for block in blocks
         if block.clicked
           block.rotation.y = 0
         else
           block.rotation.y += 0.0025
 
-      -# mesh.rotation.z += 0.005
       renderer.render scene, camera
       return
 
@@ -263,30 +233,4 @@
     animate()
 
     modal = $ ".modal"
-    # modal.show()
     bindModalClose()
-
-    # nay
-
-    # fly controls
-    #
-    # ctrls = new THREE.FlyControls camera
-    # ctrls.movementSpeed = 1000
-    # ctrls.domElement = domElement
-    # ctrls.rollSpeed = Math.PI / 24
-    # ctrls.autoForward = false
-    # ctrls.dragToLook = false
-
-    # basic material
-    #
-    # material = new THREE.MeshBasicMaterial
-    #   # color:        0x00ffff
-    #   # wireframe:    false
-    #   # vertexColors: THREE.VertexColors
-    #   # transparent:  false
-    #   map:            blockTexture.texture
-
-    # misc
-    #
-    # blockMaterial = new THREE.MeshPhongMaterial( { color: 0x00ffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 400 } )
-    # blockMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, shading: THREE.FlatShading, wireframe: true, transparent: true } )
