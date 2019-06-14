@@ -8,6 +8,12 @@ class Core
 
   attr_reader :client
 
+  STATE = {
+    retries: 0
+  }
+
+  MAX_RETRIES = 30
+
   def initialize
     @client = BitcoinClient::Client.new RPC_USER, RPC_PASSWORD, {
       host:   RPC_HOST,
@@ -59,6 +65,8 @@ class Core
   def get_transaction(tx_id)
     tx = RawTransaction.new tx_id, @client
     tx.get
+  rescue RestClient::Exceptions::OpenTimeout => err
+    retry if retry! err
   end
 
   def blocks_count
@@ -68,10 +76,20 @@ class Core
 
   def block_hash(block_number)
     @client.getblockhash block_number
+  rescue RestClient::Exceptions::OpenTimeout => err
+    retry if retry! err
   end
 
   def block(block_hash)
     @client.getblock block_hash
+  rescue RestClient::Exceptions::OpenTimeout => err
+    retry if retry! err
+  end
+
+  def retry!(error)
+    sleep 1
+    STATE[:retries] += 1
+    raise error unless STATE[:retries] < MAX_RETRIES
   end
 
   private

@@ -27,15 +27,17 @@ module ProcessBlocks
 
   def process_input(input)
     return if input["coinbase"]
-
-    script = Bitcoin::Script.new input["scriptSig"]["asm"]
-    # p script
+    script = Bitcoin::Script.new input.f("scriptSig").f("asm")
     address = script.get_pubkey_address
-    puts "Input address"
-    p address
-
+    # get original tx to get corresponding output (and output value)
+    tx = CORE.get_transaction input.f "txid"
+    outputs = tx.f("vout") || []
+    output = outputs.find do |output|
+      output.f("n") == input.f("vout")
+    end
+    value = output.f "value"
+    value = to_satoshis value
     R.decrby "balances:#{address}", value.to_i
-
   end
 
   def process_output(output)
@@ -48,16 +50,16 @@ module ProcessBlocks
       raise "WTF? multiple addresses? terminating, look up ^^^^"
     end
     address = addresses.first
-    value = value * 10**8
-    R.incrby "balances:#{address}", value.to_i
+    value = to_satoshis value
+    R.incrby "balances:#{address}", value
   end
 
   def process_tx(tx_id:)
     return if tx_id == "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b" # genesis tx
     tx = CORE.get_transaction tx_id
 
-    require 'pp'
-    pp tx
+    # require 'pp'
+    # pp tx
 
     inputs  = tx.f("vin") || []
     outputs = tx.f("vout") || []
@@ -82,6 +84,10 @@ module ProcessBlocks
     # R.sadd "transactions:#{address}", "tx"
   end
 
+  def to_satoshis(value)
+    (value * 10**8).to_i
+  end
+
 end
 
 include Utils
@@ -95,7 +101,7 @@ blocks_last = CORE.blocks_count
 puts "blocks_last", blocks_last, "\n"
 
 start = 0
-start = 169
+# start = 169
 start.upto(blocks_last).each do |block_num|
   puts "block_num", block_num, "\n"
   process_block block_num: block_num
