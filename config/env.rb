@@ -42,12 +42,11 @@ DOCKER = ENV["DOCKER"] == "1"
 # makevoid's configuration
 
 # hosts
-BCHSV = ''
 BTC   = '54.194.11.86'
 BTC_LOCAL  = 'localhost'
 
 DEFAULT_HOST = if APP_ENV == "production"
-  BCHSV
+  BTC_LOCAL
 else
   BTC_LOCAL
   BTC
@@ -57,19 +56,18 @@ RPC_HOST = ENV["BTC_RPC_HOST"] || DEFAULT_HOST
 
 RPC_PORT = 8332
 
-# note: I'll be releasing a btc core explorer
 CHAIN_NAME = case CURRENT_CHAIN
   when MAIN_CHAIN then "Bitcoin"
-  when BCH_CHAIN  then "BCH"
-  when BSV_CHAIN  then "BSV"
+  when BCH_CHAIN  then "Bitcoin Cash"
+  when DOGE_CHAIN then "Dogecoin"
 else
   "Bitcoin"
 end
 
 BTC_SYMBOL = case CURRENT_CHAIN
   when MAIN_CHAIN then "BTC"
-  when BCH_CHAIN  then "BCH ABC"
-  when BSV_CHAIN  then "BCH SV"
+  when BCH_CHAIN  then "BCH"
+  when DOGE_CHAIN then "DOGE"
 else
   "Bitcoin"
 end
