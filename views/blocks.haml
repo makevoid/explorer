@@ -52,5 +52,6 @@
 
     %a.load_more.btn{ href: js_void, class: "hidden" } Load more...
 
-    - if APP_ENV == "development"
-      %p page rendering time: #{((Time.now - @time) * 1000).to_i}ms
+    -# # dev/debug code:
+    -# - if APP_ENV == "development"
+    -#   %p page rendering time: #{((Time.now - @time) * 1000).to_i}ms
