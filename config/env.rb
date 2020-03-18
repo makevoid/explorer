@@ -14,16 +14,12 @@ Encoding.default_external = Encoding::UTF_8
 MAIN_CHAIN = "MAIN_CHAIN"
 BTC_CHAIN = MAIN_CHAIN # BCH_CHAIN (fork)
 
-# forks
-BCH_CHAIN = "BCH_CHAIN" # BCH_CHAIN (fork)
-BSV_CHAIN  = "BSV_CHAIN"  # BCH_CHAIN (fork)
-
 # main chain configuration
 
 CURRENT_CHAIN = MAIN_CHAIN
 
-
 # application path (PATH env var)
+
 path = File.expand_path "../../", __FILE__
 APP_PATH = path
 
@@ -59,6 +55,8 @@ RPC_PORT = 8332
 CHAIN_NAME = case CURRENT_CHAIN
   when MAIN_CHAIN then "Bitcoin"
   when BCH_CHAIN  then "Bitcoin Cash"
+  when LTC_CHAIN  then "Litecoin"
+  when BSV_CHAIN  then "BSV"
   when DOGE_CHAIN then "Dogecoin"
 else
   "Bitcoin"
@@ -67,6 +65,8 @@ end
 BTC_SYMBOL = case CURRENT_CHAIN
   when MAIN_CHAIN then "BTC"
   when BCH_CHAIN  then "BCH"
+  when LTC_CHAIN  then "LTC"
+  when BSV_CHAIN  then "BSV"
   when DOGE_CHAIN then "DOGE"
 else
   "Bitcoin"
