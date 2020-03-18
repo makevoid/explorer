@@ -1,0 +1,5 @@
+# /usr/bin/env bash
+
+[[ -z "$PASSWORD" ]] && echo "Error: PASSWORD env var is not set, please run: PASSWORD=yourpassword ./bitcoind_rpcauth_gen" && exit
+
+/usr/bin/env python3 rpcauth.py bitcoin $PASSWORD
