@@ -71,6 +71,7 @@ class Core
 
   def blocks_count
     info = @client.getblockchaininfo
+    # p info # uncomment this to debug the bitcoind node error
     info.fetch "blocks"
   end
 

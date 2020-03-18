@@ -38,15 +38,13 @@ DOCKER = ENV["DOCKER"] == "1"
 # makevoid's configuration
 
 # hosts
-BTC   = '54.194.11.86'
-BTC_LOCAL  = 'localhost'
 
-DEFAULT_HOST = if APP_ENV == "production"
-  BTC_LOCAL
-else
-  BTC_LOCAL
-  BTC
-end
+BITCOIND_HOST = "..." # TODO: fill this with bitcoind's IP
+# BITCOIND_HOST = ""
+BITCOIND_HOST = "91.121.181.140"
+BITCOIND_DOCKER_HOST = "localhost"
+
+DEFAULT_HOST = APP_ENV == "production" ? BITCOIND_DOCKER_HOST : BITCOIND_HOST
 
 RPC_HOST = ENV["BTC_RPC_HOST"] || DEFAULT_HOST
 
@@ -74,19 +72,13 @@ end
 
 BTC_SYM = BTC_SYMBOL
 
-password = if DOCKER
-  ENV["BITCOIN_RPCPASS"]
-else
-  # "hack" to load file locally from bitcoin.conf ( ususally the dev machine is a machine with bitcoin-qt installed and synced - w/ pruning enable if necessary e.g. when dev machines are laptops )
-  read = -> (path) { File.read File.expand_path path }
-  path = "~/.bitcoin/bitcoin.conf"
-  file = read.( path )
-  file.strip.match(/rpcpassword=(.+)/)[1]
-end
+RPC_USER = ENV["BTC_RPC_USERNAME"] || 'bitcoinrpc'
 
-# RPC_USER     = 'bitcoinrpc'
-RPC_USER     = ENV["BTC_RPC_USERNAME"] || 'bitcoinrpc'
-RPC_PASSWORD = password.strip
+RPC_PASSWORD = ENV["RPC_PASSWORD"].strip
+
+raise "Error: Please specify the RPC_PASSWORD env. var" if !RPC_PASSWORD || RPC_PASSWORD == ''
+
+
 
 # TODO:
 #
