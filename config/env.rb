@@ -39,14 +39,15 @@ DOCKER = ENV["DOCKER"] == "1"
 
 # hosts
 
-BITCOIND_HOST = "..." # TODO: fill this with bitcoind's IP
-# BITCOIND_HOST = ""
-BITCOIND_HOST = "91.121.181.140"
+BITCOIND_HOST = "" # TODO: fill this with bitcoind's IP
 BITCOIND_DOCKER_HOST = "localhost"
 
 DEFAULT_HOST = APP_ENV == "production" ? BITCOIND_DOCKER_HOST : BITCOIND_HOST
 
-RPC_HOST = ENV["BTC_RPC_HOST"] || DEFAULT_HOST
+RPC_HOST = ENV["BITCOIND_HOST"] || DEFAULT_HOST
+
+raise "Error: Please specify the RPC_HOST env. var with the ip/hostname of your bitcoind node" if !RPC_HOST || RPC_HOST == ''
+
 
 RPC_PORT = 8332
 
@@ -74,9 +75,9 @@ BTC_SYM = BTC_SYMBOL
 
 RPC_USER = ENV["BTC_RPC_USERNAME"] || 'bitcoinrpc'
 
-RPC_PASSWORD = ENV["RPC_PASSWORD"].strip
+RPC_PASSWORD = ENV["RPC_PASSWORD"] &&  ENV["RPC_PASSWORD"].strip
 
-raise "Error: Please specify the RPC_PASSWORD env. var" if !RPC_PASSWORD || RPC_PASSWORD == ''
+raise "Error: Please specify the RPC_PASSWORD env. var - this should be your bitcoind `rpcauth` password" if !RPC_PASSWORD || RPC_PASSWORD == ''
 
 
 
