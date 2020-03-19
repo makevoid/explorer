@@ -8,18 +8,13 @@ class RawTransaction
   end
 
   def get
-    raw_tx = getrawtransaction tx_id
-    decoderawtransaction raw_tx
+    getrawtransaction tx_id
   end
 
   private
 
   def getrawtransaction(tx_id)
-    @client.getrawtransaction tx_id
-  end
-
-  def decoderawtransaction(raw_tx)
-    @client.decoderawtransaction raw_tx
+    @client.getrawtransaction tx_id, 1
   end
 
   def op_returns

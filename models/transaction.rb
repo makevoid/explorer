@@ -23,11 +23,11 @@ class Transaction
   end
 
   def time_s
-    Time.at(time).strftime("%H:%M - %d %b '%y")
+    Time.at(time).strftime(TIME_FMT)
   end
 
   def amount_s
     "%.6f" % amount
   end
-  
+
 end
