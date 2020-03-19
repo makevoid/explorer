@@ -40,6 +40,10 @@ h1, h2, h3 {
   color: #236fb2;
 }
 
+h2 > span {
+  font-size: 0.85em;
+}
+
 pre {
   display: inline-block;
 }
@@ -70,6 +74,10 @@ ul {
   color: black
 }
 
+.s3{ height: 3px; }
+.s5{ height: 5px; }
+.s7{ height: 7px; }
+.s8{ height: 8px; }
 .s10{ height: 10px; }
 .s20{ height: 20px; }
 .s30{ height: 30px; }

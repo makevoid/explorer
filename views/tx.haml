@@ -3,9 +3,18 @@
   %span= tx_id
 
 %p
+  %span Confirmed at:
+  = Time.at(tx.f "blocktime").strftime(TIME_FMT)
+.s3
+%p
   %span Size:
   = tx.f "size"
   bytes
+.s3
+%p
+  %span Block:
+  %a{ href: "/blocks/#{tx.f "blockhash"}" }
+    = strip_zeros tx.f "blockhash"
 .s10
 
 %h3 Inputs

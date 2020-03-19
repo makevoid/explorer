@@ -81,12 +81,6 @@ $ ->
       load_transactions window.block_curr
       history.pushState({ block_num: window.block_curr }, "Block ##{window.block_curr}", "/blocks/#{window.block_curr}")
 
-    # TODO: delete
-    # $(".block_prev, .block_next").on "click", (evt) =>
-    #   elem = evt.currentTarget
-    #   if elem.dataset.blockCount
-    #     document.location = elem.dataset.url
-
   bind_main_elements = () ->
     $(".prev_arrow").on "click", (evt) ->
       curr = window.block_curr
