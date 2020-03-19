@@ -238,12 +238,12 @@ input {
 }
 
 .block.block_prev, .block.block_next {
-  font-size: 3em;
+  font-size: 2.2em;
 }
 
 .block.block_prev .text, .block.block_next .text {
   position: relative;
-  top: -9px;
+  top: -2px;
 }
 
 .block_cursor .block_curr:hover {
