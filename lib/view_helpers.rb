@@ -54,5 +54,9 @@ module ViewHelpers
       @content_for && @content_for[key]
     end
   end
-  
+
+  def strip_zeros(string)
+    string.sub /^0+/, '0...'
+  end
+
 end

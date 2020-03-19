@@ -1,4 +1,4 @@
-# TODO: split in multiple files
+# TODO: rewrite in vanilla js or something
 
 $ ->
 
@@ -28,7 +28,6 @@ $ ->
     console.log("load_transactions #{block_num}")
     request = $.get "/api/blocks/"+block_num, (data) ->
       max_txs_num = 16
-      # console.log "got block", data
       block = data.block
       block.num = block_num
       block.tx_count = block.tx.length

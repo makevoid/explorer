@@ -112,6 +112,8 @@ if APP_ENV == "devlopment"
   R.flushdb
 end
 
+TIME_FMT = "%H:%M - %d %b '%y"
+
 include AppHelpers
 
 require_relative 'const/const_assets'

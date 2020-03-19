@@ -86,19 +86,38 @@ class App < Roda
 
     }
 
-    r.is('blocks', Integer) { |block_id|
+    r.is('blocks', Integer) { |block_num|
       r.get {
         block_count = BLOCKS_COUNT.()
         begin
-          hash = CORE.block_hash block_id
+          hash = CORE.block_hash block_num
         rescue BitcoinClient::Errors::RPCError => e
           puts e.message
           r.halt 404, :block_not_found
         end
         view "blocks", locals: {
           block_count: block_count,
-          block_curr:  block_id,
+          block_curr:  block_num,
           hash:        hash,
+        }
+      }
+    }
+
+    r.is('blocks', String) { |block_id|
+      r.get {
+        block_count = BLOCKS_COUNT.()
+        begin
+          block = CORE.block block_id
+        rescue BitcoinClient::Errors::RPCError => e
+          puts e.message
+          r.halt 404, :block_not_found
+        end
+        view "blocks", locals: {
+          block_count: block_count,
+          block_curr:  block.f("height"),
+          block_id:    block_id,
+          block:       block,
+          hash:        block.f("hash"),
         }
       }
     }
