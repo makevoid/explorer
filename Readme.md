@@ -18,7 +18,7 @@ It uses bitcoin's default JSON RPC API, meaning that you need `bitcoind` / `bitc
 
 This project includes also an API:
 
-**API_PATH:** http://example.explorer.com/api/
+**API_PATH:** http://explorer.example.com/api/
 
 ### GET /blocks/:block_number
 
@@ -28,9 +28,9 @@ Plus on `tx` you will get an array containing all the transaction hashes of the 
 
 #### Few examples:
 
-Genesis block: http://example.explorer.com/api/blocks/0
+Genesis block: http://explorer.example.com/api/blocks/0
 
-Pre-fork block: http://example.explorer.com/api/blocks/556765
+Pre-fork block: http://explorer.example.com/api/blocks/556765
 
 ### GET /blocks_latest_num
 
