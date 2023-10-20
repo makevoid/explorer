@@ -1,6 +1,6 @@
 # Blockchain Explorer
 
-### (BTC, BCH, BCH-SV, LTC, DOGE etc. compatible)
+### (BTC, LTC, DOGE etc. compatible)
 
 
 Based off the Bitcoin Core JSON RPC API.
